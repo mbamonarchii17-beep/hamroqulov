@@ -1,6 +1,6 @@
-# ⚙ QurilishMart — Qurilish Mollari Internet Do'koni
+# ⚡ SportMax — Sport Do'koni
 
-O'zbekiston bozori uchun to'liq qurilish mollari veb-sayti.  
+O'zbekiston bozori uchun to'liq sport marketplace veb-sayti.  
 Streamlit + sof HTML/CSS/JS bilan qurilgan.
 
 ---
@@ -9,34 +9,30 @@ Streamlit + sof HTML/CSS/JS bilan qurilgan.
 
 | Bo'lim | Tavsif |
 |--------|--------|
-| **Kategoriyalar** | 4 ta tab: Sement, Kafel, Bo'yoq, Laminat — har birida 6 ta mahsulot, rasm va narx bilan |
+| **Kategoriyalar** | 6 tab: Trenajorlar, Sport Kiyim, Aksessuarlar, Sport Ovqat, Futbol, Tennis — har birida 6 ta mahsulot |
 | **Savat (Cart)** | Mahsulot qo'shish, miqdorini o'zgartirish, o'chirish — real vaqtda summa hisoblanadi |
-| **B2B Buyurtma** | Savatdagi mahsulotlar rasmlari, narxlari va jami summa bilan ko'rsatiladi; buyurtma berish formasi |
-| **Tavsiyalar** | Eng ko'p sotilgan 10 ta mahsulot (har toifadan), ranking badge bilan |
-| **Kalkulyator** | Kafel maydoni, bo'yoq litri, sement kilogrami — uchta alohida hisoblash vositasi |
-| **Xizmatlar** | Yetkazib berish, to'lov, kafolat, maslahat |
+| **Buyurtma** | Savatdagi mahsulotlar bilan to'liq buyurtma formasi |
+| **Top 10** | Eng ko'p sotilgan 10 ta mahsulot ranking badge bilan |
+| **Porsiya Kalkulyatori** | Necha kunga yetishi, 1 porsiya narxi, kunlik va oylik xarajat |
+| **Kaloriya Kalkulyatori** | BMR, TDEE, massa terish / yog' yoqish normalari + makro diagramma |
+| **Protein Kalkulyatori** | Vazn va maqsad bo'yicha kunlik protein norma + qo'shimchadan kerak miqdor |
+| **Xizmatlar** | Yetkazib berish, to'lov, kafolat, sport maslahati |
 
 ---
 
 ## 🚀 Ishga tushirish
 
-### Talab qilinadigan muhit
-- Python 3.8+
-- pip
-
-### O'rnatish
-
 ```bash
 # 1. Repozitoriyani klonlash
-git clone https://github.com/YOUR_USERNAME/qurilishmart.git
-cd qurilishmart
+git clone https://github.com/YOUR_USERNAME/sportmax.git
+cd sportmax
 
-# 2. Virtual muhit (ixtiyoriy, tavsiya etiladi)
+# 2. Virtual muhit (tavsiya etiladi)
 python -m venv venv
 source venv/bin/activate      # Linux/Mac
 venv\Scripts\activate         # Windows
 
-# 3. Kutubxonalarni o'rnatish
+# 3. Streamlit o'rnatish
 pip install streamlit
 
 # 4. Ilovani ishga tushirish
@@ -50,8 +46,8 @@ Brauzerda avtomatik ochiladi: `http://localhost:8501`
 ## 📁 Fayl Tuzilmasi
 
 ```
-qurilishmart/
-├── app.py          # Streamlit ilovasi (HTML ni yuklaydi)
+sportmax/
+├── app.py          # Streamlit ilovasi (index.html ni yuklaydi)
 ├── index.html      # Butun frontend (HTML + CSS + JS)
 ├── README.md       # Ushbu fayl
 └── requirements.txt
@@ -69,28 +65,26 @@ streamlit>=1.32.0
 
 ## 🎨 Dizayn
 
-- **Font**: Space Grotesk (sarlavhalar) + Inter (matn)
-- **Rang palitasi**: Ildiz o'rtuvi (#f97316) + Qora (#111827) + Oq (#ffffff)
+- **Font**: Barlow Condensed (sarlavhalar) + Inter (matn)
+- **Rang palitasi**: Yashil #22c55e + Qora #0a0a0a + Oq #ffffff
 - **Responsive**: Mobil (600px), planshet (900px), desktop (1200px)
 
 ---
 
 ## 🌐 GitHub Pages (faqat HTML)
 
-Agar faqat HTML versiyasini joylashtirmoqchi bo'lsangiz:
-
 1. `index.html` ni GitHub reposiga yuklang
 2. Settings → Pages → Source: `main` branch `/root`
-3. Saytingiz `https://YOUR_USERNAME.github.io/qurilishmart/` da ochiladi
+3. Saytingiz `https://YOUR_USERNAME.github.io/sportmax/` da ochiladi
 
 ---
 
 ## 📞 Aloqa
 
-- **Sayt**: qurilishmart.uz
+- **Sayt**: sportmax.uz
 - **Telefon**: +998 71 234-56-78
-- **Email**: info@qurilishmart.uz
+- **Email**: info@sportmax.uz
 
 ---
 
-© 2026 QurilishMart. Barcha huquqlar himoyalangan.
+© 2026 SportMax. Barcha huquqlar himoyalangan.
