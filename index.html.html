@@ -1,339 +1,1415 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uzum Market Analog — Hamroqulov Ibrohim</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #f4f5f7; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        header { background: white; padding: 15px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
-        .logo { color: #7000ff; font-weight: bold; font-size: 22px; text-decoration: none; }
-        .logo span { color: #333; font-size: 16px; font-weight: normal; }
-        .search-box { flex: 1; max-w: 500px; }
-        .search-box input { width: 100%; padding: 8px 15px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px; }
-        .search-box input:focus { border-color: #7000ff; }
-        .nav-buttons { display: flex; gap: 10px; }
-        
-        button { cursor: pointer; border: none; font-weight: 600; border-radius: 6px; font-size: 14px; transition: 0.2s; }
-        .btn-admin { background: #ff9800; color: white; padding: 8px 16px; }
-        .btn-admin:hover { background: #e68a00; }
-        .btn-cart { background: #ede3ff; color: #7000ff; padding: 8px 16px; position: relative; }
-        .btn-cart:hover { background: #dfceff; }
-        #cartCount { position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SportMax — Sport Do'koni</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --green: #22c55e;
+      --green-dark: #16a34a;
+      --green-light: #dcfce7;
+      --green-mid: #86efac;
+      --black: #0a0a0a;
+      --gray-900: #111827;
+      --gray-800: #1f2937;
+      --gray-700: #374151;
+      --gray-500: #6b7280;
+      --gray-300: #d1d5db;
+      --gray-200: #e5e7eb;
+      --gray-100: #f3f4f6;
+      --gray-50:  #f9fafb;
+      --white: #ffffff;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
+      --radius: 10px;
+      --shadow: 0 4px 16px rgba(0,0,0,0.08);
+      --shadow-green: 0 8px 28px rgba(34,197,94,0.22);
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
 
-        main { max-w: 1200px; width: 100%; margin: 0 auto; padding: 20px; flex-grow: 1; }
-        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        @media (max-width: 500px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--gray-50); color: var(--gray-900); line-height: 1.6; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-        .card { background: white; border: 1px solid #eef0f2; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: 0.3s; }
-        .card:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
-        .card-click-area { cursor: pointer; }
-        .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; background: #f9f9f9; }
-        .card h3 { font-size: 14px; color: #333; margin: 8px 0; font-weight: 500; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .card h3:hover { color: #7000ff; }
-        .card .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .card .price { font-weight: bold; color: #1f2937; font-size: 16px; }
-        .card .btn-add-item { background: #f4f5f7; color: #333; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; }
-        .card .btn-add-item:hover { background: #7000ff; color: white; }
+    /* ===== HEADER ===== */
+    header {
+      background: var(--black);
+      position: sticky; top: 0; z-index: 200;
+      border-bottom: 2px solid var(--green);
+    }
+    .header__inner { display: flex; align-items: center; justify-content: space-between; height: 62px; gap: 16px; }
+    .logo { font-family: var(--font-display); font-size: 26px; font-weight: 900; color: var(--white); letter-spacing: 0.02em; display: flex; align-items: center; gap: 8px; }
+    .logo em { color: var(--green); font-style: normal; }
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a { padding: 6px 13px; border-radius: 6px; font-size: 14px; font-weight: 500; color: #9ca3af; transition: color 0.15s, background 0.15s; }
+    nav a:hover { color: var(--white); background: rgba(255,255,255,0.07); }
+    .cart-btn {
+      background: var(--green) !important; color: var(--black) !important;
+      font-weight: 700 !important; border-radius: 8px !important;
+      padding: 8px 16px !important; display: flex; align-items: center; gap: 7px;
+    }
+    .cart-btn:hover { background: var(--green-dark) !important; }
+    .cart-badge {
+      background: var(--black); color: var(--green);
+      border-radius: 999px; font-size: 11px; font-weight: 700;
+      padding: 1px 7px; min-width: 20px; text-align: center;
+    }
 
-        /* 🔒 FAQAT ADMIN UCHUN KARTODAGI O'CHIRISH TUGMASI */
-        .admin-card-delete { display: none; background: #ef4444; color: white; font-size: 12px; padding: 6px; width: 100%; text-align: center; margin-top: 10px; border-radius: 6px; }
-        .admin-card-delete:hover { background: #dc2626; }
-        /* Admin ochiqligini bildiruvchi stil */
-        body.admin-mode .admin-card-delete { display: block; }
+    /* ===== HERO ===== */
+    .hero {
+      background: var(--black); padding: 72px 0 64px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; left: -100px; top: -100px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; right: -60px; bottom: -80px;
+      width: 350px; height: 350px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; position: relative; z-index: 1; }
+    .hero__eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3);
+      color: var(--green); border-radius: 999px; padding: 5px 15px;
+      font-size: 13px; font-weight: 600; margin-bottom: 20px;
+    }
+    .hero__title { font-family: var(--font-display); font-size: 58px; font-weight: 900; color: var(--white); line-height: 1.05; margin-bottom: 18px; letter-spacing: 0.01em; text-transform: uppercase; }
+    .hero__title em { color: var(--green); font-style: normal; display: block; }
+    .hero__sub { font-size: 16px; color: #9ca3af; max-width: 440px; margin-bottom: 34px; }
+    .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-size: 15px; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: all 0.18s; font-family: var(--font-body); }
+    .btn--primary { background: var(--green); color: var(--black); }
+    .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); box-shadow: var(--shadow-green); }
+    .btn--ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.2); }
+    .btn--ghost:hover { border-color: var(--green); color: var(--green); }
+    .hero__stats { display: flex; gap: 32px; margin-top: 36px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .hero__stat strong { display: block; font-family: var(--font-display); font-size: 32px; font-weight: 800; color: var(--green); }
+    .hero__stat span { font-size: 13px; color: #6b7280; }
+    .hero__img-wrap { border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; background: var(--gray-800); border: 1px solid rgba(255,255,255,0.07); }
+    .hero__img-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.92; }
 
-        /* MODAL OYNALAR */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: flex; justify-content: center; align-items: center; visibility: hidden; opacity: 0; transition: 0.2s ease-in-out; }
-        .modal.active { visibility: visible; opacity: 1; }
-        .modal-content { background: white; padding: 25px; border-radius: 16px; max-w: 500px; width: 95%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .close-btn { font-size: 28px; color: #999; cursor: pointer; background: none; font-weight: normal; }
-        .close-btn:hover { color: #333; }
+    /* ===== SECTION ===== */
+    section { padding: 72px 0; }
+    .section-head { text-align: center; margin-bottom: 48px; }
+    .section-eyebrow { display: inline-block; font-size: 13px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 10px; }
+    .section-title { font-family: var(--font-display); font-size: 38px; font-weight: 800; color: var(--gray-900); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.02em; }
+    .section-sub { font-size: 15px; color: var(--gray-500); max-width: 480px; margin: 0 auto; }
 
-        /* 🛒 KENG SAVAT MODALI (Full Screen) */
-        .modal-cart-full { background: white; width: 100%; height: 100%; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; }
-        .cart-item-row { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 15px 20px; border-radius: 8px; margin-bottom: 10px; font-size: 15px; }
-        .btn-remove-item { background: #fee2e2; color: #ef4444; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 13px; margin-left: 15px; border: 1px solid #fca5a5; }
-        .btn-remove-item:hover { background: #ef4444; color: white; }
-        .btn-checkout-full { width: 100%; background: #7000ff; color: white; padding: 16px; font-size: 16px; border-radius: 8px; font-weight: bold; }
-        .btn-checkout-full:hover { background: #5900cc; }
+    /* ===== CATALOG ===== */
+    #catalog { background: var(--white); }
+    .cat-tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+    .cat-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; border: 2px solid var(--gray-200); background: var(--white); color: var(--gray-700); transition: all 0.16s;
+    }
+    .cat-tab:hover { border-color: var(--green); color: var(--green); }
+    .cat-tab.active { background: var(--green); border-color: var(--green); color: var(--white); box-shadow: 0 4px 14px rgba(34,197,94,0.3); }
+    .cat-tab .tab-icon { font-size: 18px; }
+    .products-panel { display: none; }
+    .products-panel.active { display: block; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; }
 
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 500; }
-        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; outline: none; font-size: 14px; }
-        .form-group textarea { resize: none; height: 60px; font-family: inherit; }
-        .form-group input:focus, .form-group textarea:focus { border-color: #7000ff; }
-        .btn-submit { background: #10b981; color: white; width: 100%; padding: 12px; margin-top: 10px; font-size: 14px; }
-        .btn-submit:hover { background: #059669; }
+    /* ===== PRODUCT CARD ===== */
+    .prod-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--gray-100); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; display: flex; flex-direction: column; }
+    .prod-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-green); border-color: var(--green-mid); }
+    .prod-card__img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--gray-100); }
+    .prod-card__body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+    .prod-card__badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: var(--green-light); color: var(--green-dark); margin-bottom: 8px; align-self: flex-start; }
+    .prod-card__badge.hot { background: #fee2e2; color: #b91c1c; }
+    .prod-card__badge.new { background: #dbeafe; color: #1d4ed8; }
+    .prod-card__badge.sale { background: #fef3c7; color: #92400e; }
+    .prod-card__name { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 5px; line-height: 1.25; text-transform: uppercase; letter-spacing: 0.01em; }
+    .prod-card__desc { font-size: 13px; color: var(--gray-500); margin-bottom: 6px; flex: 1; }
+    .prod-card__meta { font-size: 12px; color: var(--green-dark); font-weight: 500; margin-bottom: 14px; }
+    .prod-card__footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .prod-card__price { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--gray-900); }
+    .prod-card__price span { font-size: 12px; font-weight: 400; color: var(--gray-500); }
+    .add-btn { background: var(--green); color: var(--white); border: none; border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.16s, transform 0.12s; display: flex; align-items: center; gap: 5px; }
+    .add-btn:hover { background: var(--green-dark); transform: scale(1.04); }
+    .add-btn.added { background: #15803d; }
 
-        .admin-list { margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; max-height: 140px; overflow-y: auto; }
-        .admin-item { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 8px 12px; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
-        .btn-del { background: #ef4444; color: white; padding: 4px 10px; font-size: 12px; }
-        .btn-del:hover { background: #dc2626; }
+    /* ===== RECOMMENDED ===== */
+    #recommended { background: var(--gray-50); }
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    .rec-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--gray-100); overflow: hidden; transition: transform 0.18s, box-shadow 0.18s; }
+    .rec-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-green); }
+    .rec-card__img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--gray-100); }
+    .rec-card__body { padding: 14px; }
+    .rec-rank { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: var(--white); font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+    .rec-card__name { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 3px; line-height: 1.3; font-family: var(--font-display); text-transform: uppercase; }
+    .rec-card__cat { font-size: 12px; color: var(--green-dark); font-weight: 500; margin-bottom: 8px; }
+    .rec-card__price { font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--gray-900); }
+    .rec-card__price small { font-size: 11px; font-weight: 400; color: var(--gray-500); }
+    .rec-add-btn { display: block; width: 100%; margin-top: 10px; padding: 7px; border: none; border-radius: 6px; background: var(--green-light); color: var(--green-dark); font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.16s; }
+    .rec-add-btn:hover { background: var(--green); color: var(--white); }
 
-        .detail-img { width: 100%; height: 240px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; background: #f9f9f9; }
-        .detail-title { font-size: 18px; color: #111; font-weight: 600; margin-bottom: 10px; }
-        .detail-price { font-size: 20px; color: #7000ff; font-weight: bold; margin-bottom: 15px; }
-        .detail-desc-title { font-size: 13px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; letter-spacing: 0.5px; }
-        .detail-desc-text { font-size: 14px; color: #444; line-height: 1.5; background: #f8f9fa; padding: 12px; border-radius: 8px; border-left: 4px solid #7000ff; margin-bottom: 20px; }
+    /* ===== CALCULATOR ===== */
+    #calculator { background: var(--white); }
+    .calc-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; max-width: 960px; margin: 0 auto; }
+    .calc-info h3 { font-family: var(--font-display); font-size: 26px; font-weight: 800; margin-bottom: 14px; text-transform: uppercase; }
+    .calc-info p { color: var(--gray-500); margin-bottom: 20px; font-size: 14px; }
+    .calc-tips { list-style: none; }
+    .calc-tips li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--gray-700); margin-bottom: 12px; }
+    .calc-tips li span { color: var(--green); font-size: 18px; }
+    .calc-box { background: var(--gray-50); padding: 28px; border-radius: 14px; border: 1.5px solid var(--gray-100); }
+    .calc-tabs { display: flex; gap: 6px; margin-bottom: 22px; flex-wrap: wrap; }
+    .calc-tab-btn { flex: 1; padding: 8px 10px; border: 2px solid var(--gray-200); border-radius: 7px; font-size: 12px; font-weight: 700; cursor: pointer; background: var(--white); color: var(--gray-700); transition: all 0.16s; white-space: nowrap; }
+    .calc-tab-btn.active { background: var(--green); border-color: var(--green); color: var(--white); }
+    .calc-panel { display: none; }
+    .calc-panel.active { display: block; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; }
+    .field input, .field select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 7px; font-size: 15px; font-family: var(--font-body); background: var(--white); color: var(--gray-900); transition: border-color 0.16s; }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--green); }
 
-        footer { background: #111827; color: #9ca3af; padding: 20px; text-align: center; margin-top: 40px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .author-box { background: #1f2937; padding: 6px 12px; border-radius: 6px; border: 1px solid #374151; color: #c084fc; font-weight: bold; }
-    </style>
+    /* Nutrion result cards */
+    .calc-results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    .calc-res-card { background: var(--green-light); border: 1.5px solid #a7f3d0; border-radius: 8px; padding: 12px 14px; text-align: center; }
+    .calc-res-card p { font-size: 12px; color: var(--green-dark); font-weight: 600; margin-bottom: 3px; }
+    .calc-res-card strong { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: #065f46; }
+    .calc-res-card.wide { grid-column: span 2; }
+    .calc-res-card.blue { background: #dbeafe; border-color: #93c5fd; }
+    .calc-res-card.blue p { color: #1d4ed8; }
+    .calc-res-card.blue strong { color: #1e3a8a; }
+    .calc-res-card.yellow { background: #fef3c7; border-color: #fcd34d; }
+    .calc-res-card.yellow p { color: #92400e; }
+    .calc-res-card.yellow strong { color: #78350f; }
+    .macro-bar { margin-top: 14px; }
+    .macro-bar__label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--gray-700); margin-bottom: 4px; }
+    .macro-bar__track { height: 8px; border-radius: 999px; background: var(--gray-200); overflow: hidden; margin-bottom: 8px; }
+    .macro-bar__fill { height: 100%; border-radius: 999px; }
+
+    /* ===== SERVICES ===== */
+    #services { background: var(--gray-50); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
+    .svc-card { background: var(--white); border-radius: var(--radius); padding: 28px 24px; border: 1.5px solid var(--gray-100); text-align: center; transition: box-shadow 0.18s, transform 0.18s; }
+    .svc-card:hover { box-shadow: var(--shadow-green); transform: translateY(-3px); }
+    .svc-icon { font-size: 44px; margin-bottom: 14px; }
+    .svc-card h3 { font-family: var(--font-display); font-size: 18px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+    .svc-card p { font-size: 14px; color: var(--gray-500); line-height: 1.55; }
+
+    /* ===== ORDER SECTION (was B2B) ===== */
+    #order-section { background: var(--gray-900); }
+    #order-section .section-title { color: var(--white); }
+    #order-section .section-eyebrow { color: var(--green); }
+    #order-section .section-sub { color: #9ca3af; }
+    .order-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .order-perks { display: flex; flex-direction: column; gap: 18px; }
+    .order-perk { display: flex; align-items: flex-start; gap: 14px; padding: 18px; background: rgba(255,255,255,0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); }
+    .order-perk__icon { font-size: 28px; flex-shrink: 0; }
+    .order-perk h4 { color: var(--white); font-weight: 700; font-size: 15px; margin-bottom: 4px; font-family: var(--font-display); text-transform: uppercase; }
+    .order-perk p { color: #9ca3af; font-size: 13px; }
+
+    /* ===== CART PANEL ===== */
+    .cart-panel { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(34,197,94,0.3); border-radius: 14px; overflow: hidden; }
+    .cart-panel__head { background: var(--green); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .cart-panel__head h3 { color: var(--black); font-family: var(--font-display); font-size: 17px; font-weight: 800; text-transform: uppercase; }
+    .cart-panel__head span { color: rgba(0,0,0,0.6); font-size: 13px; font-weight: 600; }
+    .cart-items { max-height: 340px; overflow-y: auto; }
+    .cart-items::-webkit-scrollbar { width: 4px; }
+    .cart-items::-webkit-scrollbar-thumb { background: rgba(34,197,94,0.35); border-radius: 2px; }
+    .cart-item { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .cart-item__img { width: 52px; height: 52px; border-radius: 6px; object-fit: cover; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+    .cart-item__info { flex: 1; min-width: 0; }
+    .cart-item__name { color: var(--white); font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cart-item__cat { color: #9ca3af; font-size: 11px; }
+    .cart-item__qty { display: flex; align-items: center; gap: 6px; }
+    .qty-btn { width: 26px; height: 26px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.07); color: var(--white); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; font-family: var(--font-body); }
+    .qty-btn:hover { background: var(--green); border-color: var(--green); color: var(--black); }
+    .qty-val { color: var(--white); font-size: 14px; font-weight: 600; min-width: 24px; text-align: center; }
+    .cart-item__price { color: var(--green); font-family: var(--font-display); font-size: 14px; font-weight: 700; min-width: 90px; text-align: right; }
+    .cart-item__del { color: #6b7280; background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px; transition: color 0.15s; }
+    .cart-item__del:hover { color: #f87171; }
+    .cart-empty { text-align: center; padding: 40px 20px; color: #6b7280; }
+    .cart-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .cart-empty p { font-size: 14px; }
+    .cart-footer { padding: 18px 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .cart-totals { margin-bottom: 16px; }
+    .cart-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; color: #9ca3af; }
+    .cart-row.total { font-size: 17px; font-weight: 700; color: var(--white); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; margin-top: 8px; }
+    .cart-row.total span { color: var(--green); font-family: var(--font-display); font-size: 20px; }
+    .order-btn { display: block; width: 100%; padding: 13px; background: var(--green); color: var(--black); border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.16s, transform 0.12s; font-family: var(--font-display); letter-spacing: 0.02em; text-transform: uppercase; }
+    .order-btn:hover { background: var(--green-dark); transform: translateY(-1px); color: var(--white); }
+    .order-btn:disabled { background: #374151; cursor: not-allowed; transform: none; color: #6b7280; }
+
+    /* ===== TOAST ===== */
+    .toast { position: fixed; bottom: 28px; right: 28px; background: var(--gray-900); color: var(--white); padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; z-index: 9999; box-shadow: 0 8px 24px rgba(0,0,0,0.2); border-left: 4px solid var(--green); display: flex; align-items: center; gap: 10px; transform: translateX(120%); transition: transform 0.3s cubic-bezier(.34,1.56,.64,1); }
+    .toast.show { transform: translateX(0); }
+
+    /* ===== FOOTER ===== */
+    footer { background: #0d1117; color: #6b7280; padding: 48px 0 28px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand .logo { margin-bottom: 12px; }
+    .footer-brand p { font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+    .footer-col h4 { color: var(--white); font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+    .footer-col a { display: block; color: #6b7280; font-size: 14px; margin-bottom: 9px; transition: color 0.15s; }
+    .footer-col a:hover { color: var(--green); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+    .footer-bottom a { color: #6b7280; }
+    .footer-bottom a:hover { color: var(--green); }
+
+    /* ===== MODAL ===== */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 14px; padding: 32px; max-width: 440px; width: 100%; animation: popIn 0.25s ease; }
+    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal h3 { font-family: var(--font-display); font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+    .modal p { color: var(--gray-500); font-size: 14px; margin-bottom: 22px; }
+    .modal .field input { margin-bottom: 0; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-actions .btn { flex: 1; justify-content: center; }
+    .btn--outline-dark { background: transparent; color: var(--gray-700); border: 2px solid var(--gray-200); }
+    .btn--outline-dark:hover { border-color: var(--green); color: var(--green); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .hero__grid { grid-template-columns: 1fr; }
+      .hero__img-wrap { display: none; }
+      .hero__title { font-size: 42px; }
+      .order-grid { grid-template-columns: 1fr; }
+      .calc-wrap { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .hero__title { font-size: 32px; }
+      .section-title { font-size: 28px; }
+      nav a:not(.cart-btn) { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      .calc-results-grid { grid-template-columns: 1fr; }
+      .calc-res-card.wide { grid-column: span 1; }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">UZUM <span>ANALOG</span></a>
-        <div class="search-box">
-            <input type="text" id="searchInput" oninput="searchProducts()" placeholder="Mahsulot nomini yozib qidiring...">
-        </div>
-        <div class="nav-buttons">
-            <button onclick="openAdmin()" class="btn-admin">⚙️ Admin Panel</button>
-            <button onclick="openCart()" class="btn-cart">Savat <span id="cartCount">0</span></button>
-        </div>
-    </header>
-
-    <main>
-        <div class="main-header">
-            <h2>Mahsulotlar katalogi</h2>
-            <div style="font-size: 14px; color: #666;">Jami: <b id="productTotalCount" style="color:#7000ff">0</b> ta</div>
-        </div>
-        <div id="productsGrid" class="grid"></div>
-    </main>
-
-    <!-- ⚙️ ADMIN PANEL -->
-    <div id="adminModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>⚙️ Admin boshqaruv paneli</h3>
-                <span onclick="closeAdmin()" class="close-btn">&times;</span>
-            </div>
-            
-            <div class="form-group">
-                <label>Mahsulot nomi *</label>
-                <input type="text" id="prodTitle" placeholder="Masalan: Yangi mahsulot">
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>Narxi (so'm) *</label>
-                    <input type="number" id="prodPrice" placeholder="10000">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>Eski narxi (ixtiyoriy)</label>
-                    <input type="number" id="prodOldPrice" placeholder="15000">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Rasm manzili (URL) *</label>
-                <input type="text" id="prodImage" value="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=400">
-            </div>
-            <div class="form-group">
-                <label>Mahsulot tavsifi *</label>
-                <textarea id="prodDesc" placeholder="Batafsil ma'lumot..."></textarea>
-            </div>
-            <button onclick="addNewProduct()" class="btn-submit">✅ TIZIMGA QO'SHISH</button>
-
-            <div class="admin-list" id="adminProductsList"></div>
-        </div>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="container header__inner">
+      <a href="#" class="logo">⚡ Sport<em>Max</em></a>
+      <nav>
+        <a href="#catalog">Katalog</a>
+        <a href="#recommended">Top 10</a>
+        <a href="#calculator">Kalkulyator</a>
+        <a href="#services">Xizmatlar</a>
+        <a href="#order-section" class="cart-btn">🛒 Savat <span class="cart-badge" id="cartCountBadge">0</span></a>
+      </nav>
     </div>
+  </header>
 
-    <!-- 📄 DETAL MODAL -->
-    <div id="productDetailModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Mahsulot haqida batafsil</h3>
-                <span onclick="closeProductDetail()" class="close-btn">&times;</span>
-            </div>
-            <div id="productDetailBody"></div>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__grid">
+        <div>
+          <div class="hero__eyebrow">🏆 O'zbekistoning №1 Sport Do'koni</div>
+          <h1 class="hero__title">Sport — <em>hayot tarzi!</em></h1>
+          <p class="hero__sub">Trenajorlar, sport kiyimi, fitnes aksessuarlar, oziq-ovqat va yana 600+ mahsulot. Professional sportchilar va yangi boshlovchilar uchun.</p>
+          <div class="hero__actions">
+            <a href="#catalog" class="btn btn--primary">💪 Katalogni ko'rish</a>
+            <a href="#calculator" class="btn btn--ghost">🧮 Porsiya hisobi</a>
+          </div>
+          <div class="hero__stats">
+            <div class="hero__stat"><strong>600+</strong><span>Mahsulot turi</span></div>
+            <div class="hero__stat"><strong>8,500+</strong><span>Mijozlar</span></div>
+            <div class="hero__stat"><strong>1 kun</strong><span>Yetkazib berish</span></div>
+          </div>
         </div>
+        <div class="hero__img-wrap">
+          <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&auto=format&fit=crop" alt="Sport zal" />
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- 🛒 SAVAT MODAL (FULL SCREEN) -->
-    <div id="cartModal" class="modal">
-        <div class="modal-cart-full">
+  <!-- ===== CATEGORIES / CATALOG ===== -->
+  <section id="catalog">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Katalog</span>
+        <h2 class="section-title">Kategoriyalar bo'yicha mahsulotlar</h2>
+        <p class="section-sub">Har bir sport turi uchun kerakli jihozlarni toping</p>
+      </div>
+
+      <div class="cat-tabs">
+        <button class="cat-tab active" onclick="switchCat('trenajor')" id="tab-trenajor"><span class="tab-icon">🏋️</span> Trenajorlar</button>
+        <button class="cat-tab" onclick="switchCat('kiyim')" id="tab-kiyim"><span class="tab-icon">👕</span> Sport Kiyim</button>
+        <button class="cat-tab" onclick="switchCat('aksessuar')" id="tab-aksessuar"><span class="tab-icon">🎽</span> Aksessuarlar</button>
+        <button class="cat-tab" onclick="switchCat('ovqat')" id="tab-ovqat"><span class="tab-icon">🥤</span> Sport Ovqat</button>
+        <button class="cat-tab" onclick="switchCat('futbol')" id="tab-futbol"><span class="tab-icon">⚽</span> Futbol</button>
+        <button class="cat-tab" onclick="switchCat('tennis')" id="tab-tennis"><span class="tab-icon">🎾</span> Tennis</button>
+      </div>
+
+      <!-- TRENAJORLAR -->
+      <div class="products-panel active" id="panel-trenajor">
+        <div class="products-grid">
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&auto=format&fit=crop" alt="Штанга" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Ko'p sotiladi</span>
+              <div class="prod-card__name">Shtanga To'plami 100 kg</div>
+              <div class="prod-card__desc">Professional sifatli shtanga. Disk to'plami bilan. Temir qoplama.</div>
+              <div class="prod-card__meta">📦 Omborida: 12 ta</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">2 850 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Shtanga To\'plami 100kg','Trenajorlar','https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=100','2850000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&auto=format&fit=crop" alt="Беговая дорожка" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge new">Yangi</span>
+              <div class="prod-card__name">Yugurish Yo'lagi Pro 2000</div>
+              <div class="prod-card__desc">15 tezlik, eğim 12°, LED panel, Bluetooth. Max 150 kg.</div>
+              <div class="prod-card__meta">⚡ Quvvat: 2.5 HP</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">8 900 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Yugurish Yo\'lagi Pro 2000','Trenajorlar','https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=100','8900000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&auto=format&fit=crop" alt="Гантели" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Gantel To'plami 2–20 kg</div>
+              <div class="prod-card__desc">10 juft gantel + metall stend. Rezina qoplama, slip-free.</div>
+              <div class="prod-card__meta">📦 Set: 20 dona</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">1 450 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Gantel To\'plami 2-20kg','Trenajorlar','https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=100','1450000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&auto=format&fit=crop" alt="Велотренажер" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge sale">Aksiya −20%</span>
+              <div class="prod-card__name">Velosiped Trenajori X500</div>
+              <div class="prod-card__desc">8 daraja rezistans, LCD ekran, puls o'lchagich. Sokin mexanizm.</div>
+              <div class="prod-card__meta">⚖️ Max vazn: 120 kg</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">3 200 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Velosiped Trenajori X500','Trenajorlar','https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=100','3200000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=400&auto=format&fit=crop" alt="Турник" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Devoriy Turnik Multi-Bar</div>
+              <div class="prod-card__desc">Tortishish, dips, qorin mashqlari. Temir konstruksiya, 200 kg.</div>
+              <div class="prod-card__meta">📐 O'lcham: 80×60 sm</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">580 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Devoriy Turnik Multi-Bar','Trenajorlar','https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=100','580000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=400&auto=format&fit=crop" alt="Скамейка" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Premium</span>
+              <div class="prod-card__name">Ko'krak Skameykasi Adjustable</div>
+              <div class="prod-card__desc">7 pozitsiyali, qoplangan skameyka. Shtanga va gantellar uchun.</div>
+              <div class="prod-card__meta">⚖️ Max: 300 kg</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">1 100 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Ko\'krak Skameykasi','Trenajorlar','https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=100','1100000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPORT KIYIM -->
+      <div class="products-panel" id="panel-kiyim">
+        <div class="products-grid">
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=400&auto=format&fit=crop" alt="Компрессионная футболка" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Ko'p sotiladi</span>
+              <div class="prod-card__name">Kompression Futbolka DryFit</div>
+              <div class="prod-card__desc">Namlikni tezda olib ketadi. S/M/L/XL. 6 xil rang.</div>
+              <div class="prod-card__meta">🧵 90% Polyester, 10% Elastan</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">185 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Kompression Futbolka DryFit','Sport Kiyim','https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=100','185000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&auto=format&fit=crop" alt="Кроссовки" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge new">Yangi</span>
+              <div class="prod-card__name">Yugurish Krossovkasi AeroRun</div>
+              <div class="prod-card__desc">Yengil va amortizatsiyali. Mesh'li nafas oluvchi. 39–46 razmer.</div>
+              <div class="prod-card__meta">⚖️ Og'irligi: 285 g (42 razmer)</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">890 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Yugurish Krossovkasi AeroRun','Sport Kiyim','https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=100','890000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&auto=format&fit=crop" alt="Шорты" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Sport Shortlar Pro Flex</div>
+              <div class="prod-card__desc">4 tomonlama stretch. Cho'ntak bor. Zal va ochiq havo uchun.</div>
+              <div class="prod-card__meta">🧵 4-way Stretch Fabric</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">145 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Sport Shortlar Pro Flex','Sport Kiyim','https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=100','145000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1545289414-1c3cb1c06238?w=400&auto=format&fit=crop" alt="Спортивная куртка" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge sale">Aksiya −15%</span>
+              <div class="prod-card__name">Shamoldan Himoya Kurtka</div>
+              <div class="prod-card__desc">Yengil, suv o'tkazmaydigan. Tashqi trenirovkalar uchun ideal.</div>
+              <div class="prod-card__meta">🌧 Waterproof IPX4</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">320 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Shamoldan Himoya Kurtka','Sport Kiyim','https://images.unsplash.com/photo-1545289414-1c3cb1c06238?w=100','320000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400&auto=format&fit=crop" alt="Леггинсы" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Ko'p sotiladi</span>
+              <div class="prod-card__name">Fitnes Leggings High-Waist</div>
+              <div class="prod-card__desc">Ayollar uchun. Yuqori bel, squat-proof. 5 rang. XS–XL.</div>
+              <div class="prod-card__meta">🧵 Kompression trikotaj</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">210 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Fitnes Leggings High-Waist','Sport Kiyim','https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=100','210000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1556906781-9a412961a28b?w=400&auto=format&fit=crop" alt="Рюкзак" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Premium</span>
+              <div class="prod-card__name">Sport Ryukzak 30L Pro</div>
+              <div class="prod-card__desc">Laptopga bo'lim, quruq/ho'l zonalar, suv idishi uchun cho'ntak.</div>
+              <div class="prod-card__meta">📦 Hajm: 30 litr</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">480 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Sport Ryukzak 30L Pro','Sport Kiyim','https://images.unsplash.com/photo-1556906781-9a412961a28b?w=100','480000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AKSESSUARLAR -->
+      <div class="products-panel" id="panel-aksessuar">
+        <div class="products-grid">
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&auto=format&fit=crop" alt="Пояс" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Ko'p sotiladi</span>
+              <div class="prod-card__name">Og'ir Atletika Kamari 10 sm</div>
+              <div class="prod-card__desc">Teri, S–XXL. Bel va orqani himoya qiladi. Ipbox sertifikati.</div>
+              <div class="prod-card__meta">📏 Kenglik: 10 sm</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">320 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Og\'ir Atletika Kamari 10sm','Aksessuarlar','https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=100','320000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&auto=format&fit=crop" alt="Коврик" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Yoga va Fitnes Gilam 6mm</div>
+              <div class="prod-card__desc">NBR ko'pik, slip-free, 183×61 sm. Yoga, pilates, stretching uchun.</div>
+              <div class="prod-card__meta">📐 183×61×0.6 sm</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">125 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Yoga va Fitnes Gilam 6mm','Aksessuarlar','https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=100','125000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400&auto=format&fit=crop" alt="Перчатки" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge new">Yangi</span>
+              <div class="prod-card__name">Zal Qo'lqoplari Grip Pro</div>
+              <div class="prod-card__desc">Teri va gel to'ldirish. Barmoq uchlarini qoplaydi. S–XL.</div>
+              <div class="prod-card__meta">✋ S / M / L / XL</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">98 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Zal Qo\'lqoplari Grip Pro','Aksessuarlar','https://images.unsplash.com/photo-1555597673-b21d5c935865?w=100','98000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&auto=format&fit=crop" alt="Скакалка" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Professional Sakrash Arqon</div>
+              <div class="prod-card__desc">Podshipnikli tutqich, uzunligi rostlanadi. Sport va CrossFit uchun.</div>
+              <div class="prod-card__meta">⏱ 5m/sek tezlikka mos</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">75 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Professional Sakrash Arqon','Aksessuarlar','https://images.unsplash.com/photo-1518611012118-696072aa579a?w=100','75000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=400&auto=format&fit=crop" alt="Бутылка" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Premium</span>
+              <div class="prod-card__name">Sport Suv Idishi 1L Termo</div>
+              <div class="prod-card__desc">Zanglamaydigan po'lat. 24 soat sovuq, 12 soat issiq. BPA-free.</div>
+              <div class="prod-card__meta">💧 Hajm: 1000 ml</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">145 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Sport Suv Idishi 1L Termo','Aksessuarlar','https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=100','145000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&auto=format&fit=crop" alt="Фитнес-трекер" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Bestseller</span>
+              <div class="prod-card__name">Fitnes Tracker SmartBand X7</div>
+              <div class="prod-card__desc">Puls, uyqu, qadamlar, kaloriya hisoblaydi. 7 kun batareya.</div>
+              <div class="prod-card__meta">📱 iOS va Android mos</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">680 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Fitnes Tracker SmartBand X7','Aksessuarlar','https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100','680000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPORT OVQAT -->
+      <div class="products-panel" id="panel-ovqat">
+        <div class="products-grid">
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&auto=format&fit=crop" alt="Протеин" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Ko'p sotiladi</span>
+              <div class="prod-card__name">Whey Protein Gold 2.27 kg</div>
+              <div class="prod-card__desc">80% protein. Shоkolad, vanil, qulupnay. 30g/porsiya = 24g protein.</div>
+              <div class="prod-card__meta">💪 75 porsiya | 24g protein</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">680 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Whey Protein Gold 2.27kg','Sport Ovqat','https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=100','680000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1612160609504-334bebf96a8e?w=400&auto=format&fit=crop" alt="Креатин" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Kreatin Monohydrate 500g</div>
+              <div class="prod-card__desc">Kuch va chidamlilikni oshiradi. Sof kreatin, qo'shimchasiz. 100 porsiya.</div>
+              <div class="prod-card__meta">💊 5g/porsiya | 100 porsiya</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">285 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Kreatin Monohydrate 500g','Sport Ovqat','https://images.unsplash.com/photo-1612160609504-334bebf96a8e?w=100','285000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&auto=format&fit=crop" alt="BCAA" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge new">Yangi</span>
+              <div class="prod-card__name">BCAA 2:1:1 Amino Kislotalar 300g</div>
+              <div class="prod-card__desc">Mushakni tiklaydi va parchalanishidan saqlaydi. Limon ta'mi.</div>
+              <div class="prod-card__meta">🔬 Leucine 2 : Isoleucine 1 : Valine 1</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">195 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'BCAA 2:1:1 Amino 300g','Sport Ovqat','https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=100','195000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1563212034-a3c52118cce2?w=400&auto=format&fit=crop" alt="Протеиновый батончик" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge sale">Aksiya 12 ta</span>
+              <div class="prod-card__name">Protein Bar Chok-Karamel (12 ta)</div>
+              <div class="prod-card__desc">1 ta = 20g protein, 5g yog'. Tabiiy tarkib. Mazali!</div>
+              <div class="prod-card__meta">🍫 20g protein/bar | 230 kkal</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">320 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Protein Bar 12ta Set','Sport Ovqat','https://images.unsplash.com/photo-1563212034-a3c52118cce2?w=100','320000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&auto=format&fit=crop" alt="Витамины" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Premium</span>
+              <div class="prod-card__name">Multivitamin Sport Complex 90 tab</div>
+              <div class="prod-card__desc">Sportchilar uchun 23 vitamin va mineral. 3 oylik zaxira.</div>
+              <div class="prod-card__meta">💊 90 tabletkа | 3 oy</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">245 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Multivitamin Sport 90tab','Sport Ovqat','https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=100','245000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?w=400&auto=format&fit=crop" alt="Гейнер" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Tavsiya</span>
+              <div class="prod-card__name">Mass Gainer Bulk 5 kg</div>
+              <div class="prod-card__desc">Ozg'in sportchilar uchun. 1 porsiya = 1250 kkal, 50g protein.</div>
+              <div class="prod-card__meta">🔥 1250 kkal | 50g protein/porsiya</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">520 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Mass Gainer Bulk 5kg','Sport Ovqat','https://images.unsplash.com/photo-1579722821273-0f6c7d44362f?w=100','520000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FUTBOL -->
+      <div class="products-panel" id="panel-futbol">
+        <div class="products-grid">
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&auto=format&fit=crop" alt="Мяч" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Ko'p sotiladi</span>
+              <div class="prod-card__name">Futbol To'pi Match Pro Size 5</div>
+              <div class="prod-card__desc">FIFA sertifikati. Professional o'yinlar uchun. PU qoplama.</div>
+              <div class="prod-card__meta">⚽ Size 5 | FIFA Approved</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">185 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Futbol To\'pi Match Pro','Futbol','https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=100','185000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&auto=format&fit=crop" alt="Бутсы" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge new">Yangi</span>
+              <div class="prod-card__name">Futbol Botinkasi Predator FG</div>
+              <div class="prod-card__desc">Tabiiy maysazor uchun. Mikrofiber qoplama. 39–46 razmer.</div>
+              <div class="prod-card__meta">🌱 Firm Ground (FG)</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">620 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Futbol Botinkasi Predator FG','Futbol','https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100','620000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=400&auto=format&fit=crop" alt="Форма" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Futbol Formasi To'plami (2 li)</div>
+              <div class="prod-card__desc">Futbolka + shim. Raqam bosdirish mumkin. S–3XL. 8 rang.</div>
+              <div class="prod-card__meta">👕 Forma + shim seti</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">250 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Futbol Formasi 2 li set','Futbol','https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=100','250000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=400&auto=format&fit=crop" alt="Щитки" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Kerakli</span>
+              <div class="prod-card__name">Boldir Qalqoni Professional</div>
+              <div class="prod-card__desc">EVA va fiberglass. Yengil va mustahkam. S/M/L.</div>
+              <div class="prod-card__meta">🛡 EVA + Fiberglass</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">85 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Boldir Qalqoni Professional','Futbol','https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=100','85000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=400&auto=format&fit=crop" alt="Ворота" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge sale">−10%</span>
+              <div class="prod-card__name">Mini Futbol Darvozalari (2 ta)</div>
+              <div class="prod-card__desc">Qo'yma darvozalar, 150×100sm. Trening va sport festivallari uchun.</div>
+              <div class="prod-card__meta">📐 150×100×80 sm (2 ta)</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">580 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Mini Futbol Darvozalari 2ta','Futbol','https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=100','580000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=400&auto=format&fit=crop" alt="Насос" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">To'p Nasosi Digital Manometr</div>
+              <div class="prod-card__desc">Raqamli bosim ko'rsatgich. Barcha to'p turlari uchun mos.</div>
+              <div class="prod-card__meta">⚙ Max 16 PSI</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">65 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'To\'p Nasosi Digital','Futbol','https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=100','65000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TENNIS -->
+      <div class="products-panel" id="panel-tennis">
+        <div class="products-grid">
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=400&auto=format&fit=crop" alt="Ракетка" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge hot">Bestseller</span>
+              <div class="prod-card__name">Tennis Raketkasi Carbon Pro 300g</div>
+              <div class="prod-card__desc">Grafite karbon. Boshlang'ich va o'rta daraja uchun. 3 rang.</div>
+              <div class="prod-card__meta">⚖️ 300g | Head Size: 100 sq in</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">850 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Tennis Raketkasi Carbon Pro','Tennis','https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=100','850000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=400&auto=format&fit=crop" alt="Теннисный мяч" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Tennis To'pi Wilson (4 ta)</div>
+              <div class="prod-card__desc">ITF sertifikati. Trening va musobaqa uchun. Qalin rezina.</div>
+              <div class="prod-card__meta">🎾 ITF Approved | 4 ta/quti</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">75 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Tennis To\'pi Wilson 4ta','Tennis','https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=100','75000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=400&auto=format&fit=crop" alt="Сумка для ракетки" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge new">Yangi</span>
+              <div class="prod-card__name">Tennis Sumkasi 6 Raketka</div>
+              <div class="prod-card__desc">Termo bölim, kiyim cho'ntagi, poyabzal bo'limi. 3 rang.</div>
+              <div class="prod-card__meta">🎒 6 raketka sig'adi</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">420 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Tennis Sumkasi 6 Raketka','Tennis','https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=100','420000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1622479487019-73230af2f2e4?w=400&auto=format&fit=crop" alt="Кроссовки для тенниса" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Premium</span>
+              <div class="prod-card__name">Tennis Krossovkasi Court Pro</div>
+              <div class="prod-card__desc">Yon harakatlar uchun maxsus oyoq kiyim. Qattiq korttlar uchun.</div>
+              <div class="prod-card__meta">🏟 Hard Court uchun</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">780 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Tennis Krossovkasi Court Pro','Tennis','https://images.unsplash.com/photo-1622479487019-73230af2f2e4?w=100','780000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=400&auto=format&fit=crop" alt="Струны" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge">Omborda bor</span>
+              <div class="prod-card__name">Tennis Ipi Polyester 1.25mm</div>
+              <div class="prod-card__desc">Yuqori nazorat va chidamlilik. 12m rulon. Sariq/qora.</div>
+              <div class="prod-card__meta">📏 1.25mm | 12m rulon</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">85 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Tennis Ipi Polyester 1.25mm','Tennis','https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=100','85000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+          <div class="prod-card">
+            <img class="prod-card__img" src="https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=400&auto=format&fit=crop" alt="Стол для настольного тенниса" />
+            <div class="prod-card__body">
+              <span class="prod-card__badge sale">−12%</span>
+              <div class="prod-card__name">Stol Tennisi Stoli ITTF 25mm</div>
+              <div class="prod-card__desc">25mm MDF. To'r bilan. Tashqarida va ichkarida. Yig'iladigan.</div>
+              <div class="prod-card__meta">📐 274×152×76 sm</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">3 800 000 <span>so'm</span></div>
+                <button class="add-btn" onclick="addToCart(this,'Stol Tennisi Stoli ITTF','Tennis','https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=100','3800000')">+ Savat</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== RECOMMENDED (TOP 10) ===== -->
+  <section id="recommended">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Top Tavsiyalar</span>
+        <h2 class="section-title">Eng ko'p sotib olingan 10 mahsulot</h2>
+        <p class="section-sub">Barcha kategoriyadan eng mashhur tanlovlar</p>
+      </div>
+      <div class="rec-grid" id="recGrid"><!-- JS fills --></div>
+    </div>
+  </section>
+
+  <!-- ===== CALCULATOR ===== -->
+  <section id="calculator">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Hisoblash</span>
+        <h2 class="section-title">Sport Oziq-Ovqat Kalkulyatori</h2>
+        <p class="section-sub">Porsiya, kunlik iste'mol va norma hisoblang</p>
+      </div>
+      <div class="calc-wrap">
+        <div class="calc-info">
+          <h3>Nima uchun kalkulyator?</h3>
+          <p>Qancha vaqtga mahsulot yetishini, kunlik iste'molingizni va oylik xarajatingizni oldindan biling.</p>
+          <ul class="calc-tips">
+            <li><span>🥤</span> Proteinni maqsadingizga qarab hisoblang: og'irlik × 1.6–2.4g</li>
+            <li><span>📅</span> 1 qutining necha kunga yetishini aniqlang</li>
+            <li><span>🔥</span> Kunlik kaloriya ehtiyojingizni bilish — muvaffaqiyatning kaliti</li>
+            <li><span>💰</span> Oylik xarajatingizni oldindan rej qiling</li>
+          </ul>
+        </div>
+        <div class="calc-box">
+          <div class="calc-tabs">
+            <button class="calc-tab-btn active" onclick="switchCalc('porsiya-calc', this)">🥤 Porsiya</button>
+            <button class="calc-tab-btn" onclick="switchCalc('kaloriya-calc', this)">🔥 Kaloriya</button>
+            <button class="calc-tab-btn" onclick="switchCalc('protein-calc', this)">💪 Protein</button>
+          </div>
+
+          <!-- PORSIYA KALKULYATORI -->
+          <div class="calc-panel active" id="porsiya-calc">
+            <div class="field">
+              <label>Mahsulot tanlang</label>
+              <select id="p-product" onchange="calcPorsiya()">
+                <option value="680000,75">Whey Protein Gold 2.27kg (75 porsiya)</option>
+                <option value="285000,100">Kreatin Monohydrate 500g (100 porsiya)</option>
+                <option value="195000,60">BCAA 2:1:1 Amino 300g (60 porsiya)</option>
+                <option value="520000,20">Mass Gainer Bulk 5kg (20 porsiya)</option>
+                <option value="320000,12">Protein Bar Set 12ta (12 porsiya)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Kuniga necha marta qabul qilasiz?</label>
+              <select id="p-times" onchange="calcPorsiya()">
+                <option value="1">1 marta/kun</option>
+                <option value="2" selected>2 marta/kun</option>
+                <option value="3">3 marta/kun</option>
+              </select>
+            </div>
+            <div class="calc-results-grid">
+              <div class="calc-res-card wide">
+                <p>Jami porsiya soni</p>
+                <strong id="p-total-porsiya">—</strong>
+              </div>
+              <div class="calc-res-card">
+                <p>Necha kunga yetadi</p>
+                <strong id="p-days">—</strong>
+              </div>
+              <div class="calc-res-card blue">
+                <p>1 porsiya narxi</p>
+                <strong id="p-per-porsiya">—</strong>
+              </div>
+              <div class="calc-res-card yellow">
+                <p>Kunlik xarajat</p>
+                <strong id="p-daily-cost">—</strong>
+              </div>
+              <div class="calc-res-card wide">
+                <p>Oylik xarajat (taxmin)</p>
+                <strong id="p-monthly-cost">—</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- KALORIYA KALKULYATORI -->
+          <div class="calc-panel" id="kaloriya-calc">
+            <div class="field">
+              <label>Vazningiz (kg)</label>
+              <input type="number" id="k-weight" value="75" min="30" max="200" oninput="calcKaloriya()" />
+            </div>
+            <div class="field">
+              <label>Bo'yingiz (sm)</label>
+              <input type="number" id="k-height" value="175" min="140" max="220" oninput="calcKaloriya()" />
+            </div>
+            <div class="field">
+              <label>Yoshingiz</label>
+              <input type="number" id="k-age" value="25" min="15" max="70" oninput="calcKaloriya()" />
+            </div>
+            <div class="field">
+              <label>Jins</label>
+              <select id="k-gender" onchange="calcKaloriya()">
+                <option value="m">Erkak</option>
+                <option value="f">Ayol</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Faollik darajasi</label>
+              <select id="k-activity" onchange="calcKaloriya()">
+                <option value="1.2">Kam harakatli (ofis)</option>
+                <option value="1.375" selected>Engil trening (3x/hafta)</option>
+                <option value="1.55">O'rta trening (5x/hafta)</option>
+                <option value="1.725">Og'ir trening (6-7x/hafta)</option>
+                <option value="1.9">Professional sport</option>
+              </select>
+            </div>
+            <div class="calc-results-grid">
+              <div class="calc-res-card blue">
+                <p>Bazal metabolizm (BMR)</p>
+                <strong id="k-bmr">—</strong>
+              </div>
+              <div class="calc-res-card wide">
+                <p>Kunlik kaloriya ehtiyoji (TDEE)</p>
+                <strong id="k-tdee">—</strong>
+              </div>
+              <div class="calc-res-card">
+                <p>Massa terish uchun</p>
+                <strong id="k-gain">—</strong>
+              </div>
+              <div class="calc-res-card yellow">
+                <p>Yog' yoqish uchun</p>
+                <strong id="k-lose">—</strong>
+              </div>
+            </div>
+            <div class="macro-bar" id="macro-bars"></div>
+          </div>
+
+          <!-- PROTEIN NORMA KALKULYATORI -->
+          <div class="calc-panel" id="protein-calc">
+            <div class="field">
+              <label>Vazningiz (kg)</label>
+              <input type="number" id="pr-weight" value="75" min="30" max="200" oninput="calcProtein()" />
+            </div>
+            <div class="field">
+              <label>Maqsad</label>
+              <select id="pr-goal" onchange="calcProtein()">
+                <option value="1.6">Sog'lik saqlash (1.6 g/kg)</option>
+                <option value="2.0" selected>Massa terish (2.0 g/kg)</option>
+                <option value="2.4">Maksimal kuch (2.4 g/kg)</option>
+                <option value="2.2">Yog' yoqib massa saqlash (2.2 g/kg)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Ovqatdan olinadigan protein (g/kun)</label>
+              <input type="number" id="pr-food" value="80" min="0" max="200" oninput="calcProtein()" />
+            </div>
+            <div class="calc-results-grid">
+              <div class="calc-res-card wide">
+                <p>Kunlik protein normasi</p>
+                <strong id="pr-norm">—</strong>
+              </div>
+              <div class="calc-res-card blue">
+                <p>Ovqatdan olinadi</p>
+                <strong id="pr-food-val">—</strong>
+              </div>
+              <div class="calc-res-card">
+                <p>Qo'shimchadan kerak</p>
+                <strong id="pr-supp">—</strong>
+              </div>
+              <div class="calc-res-card yellow">
+                <p>Taxminiy porsiya/kun</p>
+                <strong id="pr-porsiya">—</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Xizmatlar</span>
+        <h2 class="section-title">Nima uchun SportMax?</h2>
+        <p class="section-sub">Sizning sport sayohatingizda ishonchli hamkoringiz</p>
+      </div>
+      <div class="services-grid">
+        <div class="svc-card">
+          <div class="svc-icon">🚀</div>
+          <h3>Tezkor Yetkazish</h3>
+          <p>Toshkent bo'ylab kuni yetkazib beramiz. 500 000 so'mdan yuqori buyurtmalarda bepul.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon">💳</div>
+          <h3>Qulay To'lov</h3>
+          <p>Click, Payme, Uzcard, Humo, naqd yoki 12 oygacha bo'lib to'lash imkoniyati.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon">🏅</div>
+          <h3>Original Mahsulotlar</h3>
+          <p>Barcha mahsulotlar original va sertifikatlangan. Soxta bo'lsa — 100% qaytaramiz.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon">🧑‍💪</div>
+          <h3>Sport Maslahati</h3>
+          <p>Fitnes mutaxassislarimiz sizga mos mahsulot tanlashda bepul maslahat berishadi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ORDER SECTION (like B2B) ===== -->
+  <section id="order-section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Buyurtma</span>
+        <h2 class="section-title">Savat va buyurtma berish</h2>
+        <p class="section-sub">Tanlangan mahsulotlarni tasdiqlang va buyurtma bering</p>
+      </div>
+      <div class="order-grid">
+        <div class="order-perks">
+          <div class="order-perk">
+            <div class="order-perk__icon">📦</div>
             <div>
-                <div class="modal-header">
-                    <h2 style="font-weight: bold; font-size: 20px;">Xarid Savati</h2>
-                    <span onclick="closeCart()" class="close-btn" style="font-size: 32px;">&times;</span>
-                </div>
-                <div id="cartItemsList" style="display:flex; flex-direction:column; gap:10px; margin-top: 20px;"></div>
+              <h4>Ulgurji Buyurtmalar</h4>
+              <p>Sport klublari va jamoalar uchun 10+ mahsulotda 15–20% chegirma. Maxsus shartnoma shartlari.</p>
             </div>
-            
-            <div style="border-top:1px solid #eee; padding-top:20px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:bold; font-size: 18px;">
-                    <span>Jami summa:</span>
-                    <span id="cartTotalPrice" style="color:#7000ff; font-size:22px;">0 so'm</span>
-                </div>
-                <button onclick="checkout()" class="btn-checkout-full">Buyurtma berish</button>
+          </div>
+          <div class="order-perk">
+            <div class="order-perk__icon">🎽</div>
+            <div>
+              <h4>Jamoaviy Forma</h4>
+              <p>Futbol, basketbol, voleybol jamoa formalari — logotip va raqam bosdirish xizmati bilan.</p>
             </div>
+          </div>
+          <div class="order-perk">
+            <div class="order-perk__icon">🏋️</div>
+            <div>
+              <h4>Zal Jihozlash</h4>
+              <p>Fitnes zal yoki sport maydonini to'liq jihozlaymiz. Bepul loyiha va hisob-kitob.</p>
+            </div>
+          </div>
+          <div class="order-perk">
+            <div class="order-perk__icon">🤝</div>
+            <div>
+              <h4>Shaxsiy Menejer</h4>
+              <p>Har bir mijozga alohida menejer tayinlanadi. 7/24 maslahat va yetkazib berish nazorati.</p>
+            </div>
+          </div>
         </div>
+
+        <!-- CART PANEL -->
+        <div class="cart-panel">
+          <div class="cart-panel__head">
+            <h3>🛒 Buyurtma Jadvali</h3>
+            <span id="cartCount">0 mahsulot</span>
+          </div>
+          <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+              <div class="empty-icon">🛒</div>
+              <p>Hali mahsulot qo'shilmagan.<br>Katalogdan mahsulot tanlang.</p>
+            </div>
+          </div>
+          <div class="cart-footer">
+            <div class="cart-totals" id="cartTotals" style="display:none">
+              <div class="cart-row"><span>Mahsulotlar:</span><span id="itemCount">0 ta</span></div>
+              <div class="cart-row"><span>Yetkazib berish:</span><span>Bepul</span></div>
+              <div class="cart-row total"><span>Jami summa:</span><span id="totalSum">0 so'm</span></div>
+            </div>
+            <button class="order-btn" id="orderBtn" disabled onclick="openOrderModal()">
+              📋 Buyurtma Berish
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <footer>
-        <p>&copy; 2026 Uzum Analog. Barcha huquqlar himoyalangan.</p>
-        <div class="author-box">Loyiha muallifi: Hamroqulov Ibrohim</div>
-    </footer>
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">⚡ Sport<em>Max</em></div>
+          <p>O'zbekistoning eng yirik sport do'koni. Trenajorlar, kiyim, aksessuarlar va sport oziq-ovqatlarining yagona manzili.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Kategoriyalar</h4>
+          <a href="#catalog">Trenajorlar</a>
+          <a href="#catalog">Sport Kiyim</a>
+          <a href="#catalog">Aksessuarlar</a>
+          <a href="#catalog">Sport Ovqat</a>
+          <a href="#catalog">Futbol</a>
+          <a href="#catalog">Tennis</a>
+        </div>
+        <div class="footer-col">
+          <h4>Ma'lumot</h4>
+          <a href="#">Biz haqimizda</a>
+          <a href="#">Yetkazib berish</a>
+          <a href="#">Qaytarish siyosati</a>
+          <a href="#">Kafolat</a>
+          <a href="#">Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Aloqa</h4>
+          <a href="#">sportmax.uz</a>
+          <a href="#">+998 71 234-56-78</a>
+          <a href="#">info@sportmax.uz</a>
+          <a href="#">Toshkent, Chilonzor</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SportMax. Barcha huquqlar himoyalangan.</span>
+        <span><a href="#">Maxfiylik siyosati</a> · <a href="#">Foydalanish shartlari</a></span>
+      </div>
+    </div>
+  </footer>
 
-    <script>
-        // Rasmda keltirilgan hamma mahsulotlar ro'yxati
-        const defaultProducts = [
-            { id: 1, title: "Smartfon Xiaomi Redmi Note 13 8/256 GB", price: 2450000, image_url: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=400", description: "Smartfon xususiyatlari." },
-            { id: 2, title: "Erkaklar shimi", price: 120000, image_url: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=400", description: "Sifatli klassik erkaklar shimi." },
-            { id: 3, title: "Coca cola 1,5L", price: 15000, image_url: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=400", description: "Yaxna ichimlik Coca-Cola." },
-            { id: 4, title: "Velosiped", price: 130000, image_url: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?q=80&w=400", description: "Sport va sayr velosipedi." },
-            { id: 5, title: "Erkaklar kepkasi", price: 14000, image_url: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?q=80&w=400", description: "Erkaklar uchun qora kepka." }
-        ];
+  <!-- ===== ORDER MODAL ===== -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal">
+      <h3>📋 Buyurtma Berish</h3>
+      <p>Ma'lumotlaringizni kiriting, menejerimiz tez orada siz bilan bog'lanadi.</p>
+      <div class="field">
+        <label>Ism va familiya</label>
+        <input type="text" id="orderName" placeholder="Abdullayev Jasur" />
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Telefon raqam</label>
+        <input type="tel" id="orderPhone" placeholder="+998 90 123-45-67" />
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Manzil (ixtiyoriy)</label>
+        <input type="text" id="orderAddress" placeholder="Toshkent, Chilonzor tumani" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn--outline-dark" onclick="closeOrderModal()">Bekor qilish</button>
+        <button class="btn btn--primary" onclick="confirmOrder()">✅ Tasdiqlash</button>
+      </div>
+    </div>
+  </div>
 
-        let products = JSON.parse(localStorage.getItem('uzum_products'));
-        if (!products || products.length === 0) {
-            products = defaultProducts;
-            localStorage.setItem('uzum_products', JSON.stringify(products));
-        }
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Savatga qo'shildi</span>
+  </div>
 
-        let cart = [];
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    let cart = [];
 
-        function renderProducts(list) {
-            const grid = document.getElementById('productsGrid');
-            document.getElementById('productTotalCount').innerText = list.length;
-            grid.innerHTML = '';
-            
-            list.forEach(p => {
-                grid.innerHTML += `
-                    <div class="card">
-                        <div class="card-click-area" onclick="openProductDetail(${p.id})">
-                            <img src="${p.image_url}">
-                            <h3>${p.title}</h3>
-                        </div>
-                        <div class="price-row">
-                            <span class="price">${p.price.toLocaleString()} so'm</span>
-                            <button onclick="addToCart(${p.id})" class="btn-add-item">+</button>
-                        </div>
-                        <!-- FAQAT ADMIN REJIMIDA KO'RINADIGAN O'CHIRISH BUTTONI -->
-                        <button onclick="deleteProduct(${p.id})" class="admin-card-delete">🗑️ Tizimdan o'chirish</button>
-                    </div>`;
-            });
-        }
+    // ── TOP 10 RECOMMENDED ─────────────────────────────────────
+    const RECOMMENDED = [
+      { rank:1,  name:"Whey Protein Gold 2.27kg",   cat:"Sport Ovqat",   price:680000, img:"https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=200&auto=format&fit=crop" },
+      { rank:2,  name:"Shtanga To'plami 100kg",      cat:"Trenajorlar",   price:2850000,img:"https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=200&auto=format&fit=crop" },
+      { rank:3,  name:"Kompression Futbolka DryFit", cat:"Sport Kiyim",   price:185000, img:"https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=200&auto=format&fit=crop" },
+      { rank:4,  name:"Fitnes Tracker SmartBand X7", cat:"Aksessuarlar",  price:680000, img:"https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&auto=format&fit=crop" },
+      { rank:5,  name:"Futbol To'pi Match Pro",      cat:"Futbol",        price:185000, img:"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=200&auto=format&fit=crop" },
+      { rank:6,  name:"Tennis Raketkasi Carbon Pro", cat:"Tennis",        price:850000, img:"https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=200&auto=format&fit=crop" },
+      { rank:7,  name:"Gantel To'plami 2-20kg",      cat:"Trenajorlar",   price:1450000,img:"https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=200&auto=format&fit=crop" },
+      { rank:8,  name:"Kreatin Monohydrate 500g",    cat:"Sport Ovqat",   price:285000, img:"https://images.unsplash.com/photo-1612160609504-334bebf96a8e?w=200&auto=format&fit=crop" },
+      { rank:9,  name:"Yoga va Fitnes Gilam 6mm",    cat:"Aksessuarlar",  price:125000, img:"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&auto=format&fit=crop" },
+      { rank:10, name:"Yugurish Krossovkasi AeroRun",cat:"Sport Kiyim",   price:890000, img:"https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=200&auto=format&fit=crop" }
+    ];
 
-        function openProductDetail(id) {
-            const product = products.find(p => p.id === id);
-            if (!product) return;
-            const body = document.getElementById('productDetailBody');
-            body.innerHTML = `
-                <img src="${product.image_url}" class="detail-img">
-                <h2 class="detail-title">${product.title}</h2>
-                <div class="detail-price">${product.price.toLocaleString()} so'm</div>
-                <div class="detail-desc-text">${product.description || "Ma'lumot mavjud emas."}</div>
-                <button onclick="addToCart(${product.id}); closeProductDetail();" style="width:100%; background:#7000ff; color:white; padding:12px; font-size:15px;">🛒 SAVATGA QO'SHISH</button>
-            `;
-            document.getElementById('productDetailModal').classList.add('active');
-        }
+    function buildRecommended() {
+      document.getElementById('recGrid').innerHTML = RECOMMENDED.map(p => `
+        <div class="rec-card">
+          <img class="rec-card__img" src="${p.img}" alt="${p.name}" loading="lazy" />
+          <div class="rec-card__body">
+            <div class="rec-rank">${p.rank}</div>
+            <div class="rec-card__name">${p.name}</div>
+            <div class="rec-card__cat">${p.cat}</div>
+            <div class="rec-card__price">${p.price.toLocaleString()} <small>so'm</small></div>
+            <button class="rec-add-btn" onclick="addToCart(this,'${p.name.replace(/'/g,"\\'")}','${p.cat}','${p.img}','${p.price}')">+ Savatga qo'shish</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    buildRecommended();
 
-        function closeProductDetail() { document.getElementById('productDetailModal').classList.remove('active'); }
+    // ── CATEGORY TABS ───────────────────────────────────────────
+    function switchCat(id) {
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.products-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      document.getElementById('panel-' + id).classList.add('active');
+    }
 
-        function addToCart(id) {
-            const pr = products.find(p => p.id === id);
-            const inCart = cart.find(c => c.product.id === id);
-            if(inCart) inCart.quantity++;
-            else cart.push({ product: pr, quantity: 1 });
-            updateCart();
-        }
+    // ── CALC TABS ───────────────────────────────────────────────
+    function switchCalc(id, btn) {
+      document.querySelectorAll('.calc-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(id).classList.add('active');
+    }
 
-        function removeCartItem(id) {
-            cart = cart.filter(c => c.product.id !== id);
-            updateCart();
-        }
+    // ── PORSIYA KALKULYATORI ────────────────────────────────────
+    function calcPorsiya() {
+      const sel = document.getElementById('p-product').value.split(',');
+      const price = parseInt(sel[0]);
+      const portions = parseInt(sel[1]);
+      const times = parseInt(document.getElementById('p-times').value);
+      const days = Math.floor(portions / times);
+      const perP = Math.round(price / portions);
+      const daily = perP * times;
+      const monthly = daily * 30;
+      document.getElementById('p-total-porsiya').textContent = portions + ' ta';
+      document.getElementById('p-days').textContent = days + ' kun';
+      document.getElementById('p-per-porsiya').textContent = perP.toLocaleString() + ' so\'m';
+      document.getElementById('p-daily-cost').textContent = daily.toLocaleString() + ' so\'m';
+      document.getElementById('p-monthly-cost').textContent = monthly.toLocaleString() + ' so\'m';
+    }
+    calcPorsiya();
 
-        function updateCart() {
-            let totalQty = 0, totalPrice = 0;
-            const list = document.getElementById('cartItemsList');
-            list.innerHTML = cart.length === 0 ? '<div style="color:#999; text-align:center; padding:40px;">Savat bo\'sh</div>' : '';
+    // ── KALORIYA KALKULYATORI ────────────────────────────────────
+    function calcKaloriya() {
+      const w   = parseFloat(document.getElementById('k-weight').value) || 75;
+      const h   = parseFloat(document.getElementById('k-height').value) || 175;
+      const a   = parseFloat(document.getElementById('k-age').value) || 25;
+      const g   = document.getElementById('k-gender').value;
+      const act = parseFloat(document.getElementById('k-activity').value) || 1.375;
+      const bmr = g === 'm' ? 10*w + 6.25*h - 5*a + 5 : 10*w + 6.25*h - 5*a - 161;
+      const tdee = Math.round(bmr * act);
+      document.getElementById('k-bmr').textContent  = Math.round(bmr) + ' kkal';
+      document.getElementById('k-tdee').textContent = tdee + ' kkal';
+      document.getElementById('k-gain').textContent = (tdee + 300) + ' kkal';
+      document.getElementById('k-lose').textContent = (tdee - 500) + ' kkal';
+      // Macro bars
+      const pG = Math.round(tdee * 0.30 / 4);
+      const cG = Math.round(tdee * 0.45 / 4);
+      const fG = Math.round(tdee * 0.25 / 9);
+      const total = pG + cG + fG;
+      document.getElementById('macro-bars').innerHTML = `
+        <div class="macro-bar__label"><span>🥩 Protein</span><span>${pG}g (30%)</span></div>
+        <div class="macro-bar__track"><div class="macro-bar__fill" style="width:30%;background:#22c55e"></div></div>
+        <div class="macro-bar__label"><span>🍚 Uglevod</span><span>${cG}g (45%)</span></div>
+        <div class="macro-bar__track"><div class="macro-bar__fill" style="width:45%;background:#3b82f6"></div></div>
+        <div class="macro-bar__label"><span>🥑 Yog'</span><span>${fG}g (25%)</span></div>
+        <div class="macro-bar__track"><div class="macro-bar__fill" style="width:25%;background:#f59e0b"></div></div>
+      `;
+    }
+    calcKaloriya();
 
-            cart.forEach(c => {
-                totalQty += c.quantity;
-                totalPrice += c.product.price * c.quantity;
-                
-                list.innerHTML += `
-                    <div class="cart-item-row">
-                        <span style="font-weight: 500;">${c.product.title}</span>
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <span style="font-weight: bold;">${c.quantity} ta - ${(c.product.price * c.quantity).toLocaleString()} so'm</span>
-                            <button onclick="removeCartItem(${c.product.id})" class="btn-remove-item">O'chirish</button>
-                        </div>
-                    </div>`;
-            });
+    // ── PROTEIN NORMA KALKULYATORI ───────────────────────────────
+    function calcProtein() {
+      const w    = parseFloat(document.getElementById('pr-weight').value) || 75;
+      const coef = parseFloat(document.getElementById('pr-goal').value) || 2.0;
+      const food = parseFloat(document.getElementById('pr-food').value) || 80;
+      const norm = Math.round(w * coef);
+      const supp = Math.max(0, norm - food);
+      const pors = Math.ceil(supp / 24);
+      document.getElementById('pr-norm').textContent     = norm + ' g/kun';
+      document.getElementById('pr-food-val').textContent = food + ' g/kun';
+      document.getElementById('pr-supp').textContent     = supp + ' g/kun';
+      document.getElementById('pr-porsiya').textContent  = pors + ' porsiya/kun';
+    }
+    calcProtein();
 
-            document.getElementById('cartCount').innerText = totalQty;
-            document.getElementById('cartTotalPrice').innerText = totalPrice.toLocaleString() + " so'm";
-        }
+    // ── CART ─────────────────────────────────────────────────────
+    function addToCart(btn, name, cat, img, price) {
+      const ex = cart.find(i => i.name === name);
+      if (ex) { ex.qty++; } else { cart.push({ name, cat, img, price: parseInt(price), qty: 1 }); }
+      renderCart();
+      showToast('✅', '"' + name + '" savatga qo\'shildi');
+      if (btn) {
+        const orig = btn.textContent;
+        btn.textContent = '✓ Qo\'shildi';
+        btn.classList.add('added');
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 1500);
+      }
+    }
 
-        // 🔒 ADMIN BOSHQARUVI FUNKSIYALARI
-        function openAdmin() {
-            document.body.classList.add('admin-mode'); // Sahifaga admin rejimini yoqamiz
-            document.getElementById('adminModal').classList.add('active');
-            renderAdminList();
-        }
-        
-        function closeAdmin() {
-            document.body.classList.remove('admin-mode'); // Admin yopilganda rejim o'chadi
-            document.getElementById('adminModal').classList.remove('active');
-        }
+    function changeQty(name, d) {
+      const item = cart.find(i => i.name === name);
+      if (!item) return;
+      item.qty += d;
+      if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
+      renderCart();
+    }
 
-        function deleteProduct(id) {
-            if(confirm("Haqiqatan ham ushbu mahsulotni tizimdan o'chirmoqchimisiz?")) {
-                products = products.filter(p => p.id !== id);
-                cart = cart.filter(c => c.product.id !== id); // Savatdan ham olib tashlaymiz
-                localStorage.setItem('uzum_products', JSON.stringify(products));
-                renderProducts(products);
-                updateCart();
-                renderAdminList();
-            }
-        }
+    function removeItem(name) {
+      cart = cart.filter(i => i.name !== name);
+      renderCart();
+    }
 
-        function addNewProduct() {
-            const title = document.getElementById('prodTitle').value.trim();
-            const price = parseFloat(document.getElementById('prodPrice').value);
-            const imgUrl = document.getElementById('prodImage').value.trim();
-            const desc = document.getElementById('prodDesc').value.trim();
+    function renderCart() {
+      const qty   = cart.reduce((s, i) => s + i.qty, 0);
+      const total = cart.reduce((s, i) => s + i.qty * i.price, 0);
+      document.getElementById('cartCountBadge').textContent = qty;
+      document.getElementById('cartCount').textContent = qty + ' mahsulot';
+      const container = document.getElementById('cartItems');
+      if (cart.length === 0) {
+        container.innerHTML = '<div class="cart-empty"><div class="empty-icon">🛒</div><p>Hali mahsulot qo\'shilmagan.<br>Katalogdan tanlang.</p></div>';
+        document.getElementById('cartTotals').style.display = 'none';
+        document.getElementById('orderBtn').disabled = true;
+      } else {
+        container.innerHTML = cart.map(item => `
+          <div class="cart-item">
+            <img class="cart-item__img" src="${item.img}" alt="${item.name}"/>
+            <div class="cart-item__info">
+              <div class="cart-item__name">${item.name}</div>
+              <div class="cart-item__cat">${item.cat}</div>
+            </div>
+            <div class="cart-item__qty">
+              <button class="qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', -1)">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', +1)">+</button>
+            </div>
+            <div class="cart-item__price">${(item.qty*item.price).toLocaleString()} so'm</div>
+            <button class="cart-item__del" onclick="removeItem('${item.name.replace(/'/g,"\\'")}')">🗑</button>
+          </div>`).join('');
+        document.getElementById('itemCount').textContent  = qty + ' ta';
+        document.getElementById('totalSum').textContent   = total.toLocaleString() + ' so\'m';
+        document.getElementById('cartTotals').style.display = 'block';
+        document.getElementById('orderBtn').disabled = false;
+      }
+    }
 
-            if (!title || isNaN(price) || price <= 0) { alert("Ma'lumotlarni to'liq kiriting!"); return; }
+    // ── MODAL ─────────────────────────────────────────────────────
+    function openOrderModal()  { document.getElementById('orderModal').classList.add('open'); }
+    function closeOrderModal() { document.getElementById('orderModal').classList.remove('open'); }
+    function confirmOrder() {
+      const name  = document.getElementById('orderName').value.trim();
+      const phone = document.getElementById('orderPhone').value.trim();
+      if (!name || !phone) { showToast('⚠️', 'Ism va telefon kiriting'); return; }
+      closeOrderModal();
+      cart = [];
+      renderCart();
+      showToast('🎉', 'Buyurtma qabul qilindi! Tez orada aloqaga chiqamiz.');
+    }
+    document.getElementById('orderModal').addEventListener('click', function(e) {
+      if (e.target === this) closeOrderModal();
+    });
 
-            products.push({ id: Date.now(), title, price, image_url: imgUrl, description: desc });
-            localStorage.setItem('uzum_products', JSON.stringify(products));
-            renderProducts(products);
-            renderAdminList();
-            alert("Mahsulot qo'shildi! ✅");
-        }
-
-        function renderAdminList() {
-            const container = document.getElementById('adminProductsList');
-            container.innerHTML = '<h4 style="font-size:12px; color:#ef4444; margin-bottom:10px;">MAHSULOTLAR RO\'YXATI:</h4>';
-            products.forEach(p => {
-                container.innerHTML += `
-                    <div class="admin-item">
-                        <span>${p.title}</span>
-                        <button onclick="deleteProduct(${p.id})" class="btn-del">O'chirish</button>
-                    </div>`;
-            });
-        }
-
-        function openCart() { document.getElementById('cartModal').classList.add('active'); }
-        function closeCart() { document.getElementById('cartModal').classList.remove('active'); }
-        function searchProducts() {
-            const text = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.title.toLowerCase().includes(text));
-            renderProducts(filtered);
-        }
-        function checkout() {
-            if(cart.length === 0) { alert("Savat bo'sh!"); return; }
-            alert("Buyurtma qabul qilindi!\nYaratuvchi: Hamroqulov Ibrohim");
-            cart = []; updateCart(); closeCart();
-        }
-
-        renderProducts(products);
-    </script>
+    // ── TOAST ─────────────────────────────────────────────────────
+    let toastTimer;
+    function showToast(icon, msg) {
+      clearTimeout(toastTimer);
+      document.getElementById('toastIcon').textContent = icon;
+      document.getElementById('toastMsg').textContent  = msg;
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+    }
+  </script>
 </body>
 </html>
