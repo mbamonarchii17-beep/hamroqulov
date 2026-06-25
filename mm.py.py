@@ -3,439 +3,252 @@ import streamlit.components.v1 as components
 
 # Streamlit sahifa sozlamalari
 st.set_page_config(
-    page_title="QurilishMart — Qurilish Mollari",
-    page_icon="⚙",
+    page_title="SportMax — Sport Do'koni",
+    page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# Alohida HTML fayl ochish shart emas! To'g'ridan-to'g'ri shu yerga biriktirildi:
+# Alohida HTML fayl shart emas - barcha mantiq, dizayn va kalkulyator shu yerda:
 html_content = """<!DOCTYPE html>
 <html lang="uz">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QurilishMart — Qurilish Mollari</title>
+  <title>SportMax — Sport Do'koni</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ANDOZANING ASOSIY STILLARI */
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9fafb;
-      color: #1f2937;
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --green: #22c55e;
+      --green-dark: #16a34a;
+      --green-light: #dcfce7;
+      --green-mid: #86efac;
+      --black: #0a0a0a;
+      --gray-900: #111827;
+      --gray-800: #1f2937;
+      --gray-700: #374151;
+      --gray-500: #6b7280;
+      --gray-300: #d1d5db;
+      --gray-200: #e5e7eb;
+      --gray-100: #f3f4f6;
+      --gray-50:  #f9fafb;
+      --white: #ffffff;
+      --red: #ef4444;
+      --radius: 10px;
+      --shadow-green: 0 8px 28px rgba(34,197,94,0.15);
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Inter', sans-serif;
     }
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      box-sizing: border-box;
-    }
-    header {
-      background: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 15px 0;
-    }
-    .header__inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-      text-decoration: none;
-      color: #111827;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .logo strong { color: #f97316; }
-    nav a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: #4b5563;
-      font-weight: 500;
-    }
-    nav a:hover { color: #f97316; }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--gray-50); color: var(--gray-900); line-height: 1.6; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== HEADER ===== */
+    header { background: var(--black); position: sticky; top: 0; z-index: 200; border-bottom: 2px solid var(--green); }
+    .header__inner { display: flex; align-items: center; justify-content: space-between; height: 62px; gap: 16px; }
+    .logo { font-family: var(--font-display); font-size: 26px; font-weight: 900; color: var(--white); letter-spacing: 0.02em; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .logo em { color: var(--green); font-style: normal; }
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a { padding: 6px 13px; border-radius: 6px; font-size: 14px; font-weight: 500; color: #9ca3af; text-decoration: none; transition: all 0.15s; }
+    nav a:hover { color: var(--white); background: rgba(255,255,255,0.07); }
+    .cart-btn { background: var(--green) !important; color: var(--black) !important; font-weight: 700 !important; border-radius: 8px !important; padding: 8px 16px !important; display: flex; align-items: center; gap: 7px; cursor: pointer; border: none; }
+    .cart-btn:hover { background: var(--green-dark) !important; }
+    .cart-badge { background: var(--black); color: var(--green); border-radius: 999px; font-size: 11px; font-weight: 700; padding: 1px 7px; min-width: 20px; text-align: center; }
+
+    /* ===== HERO ===== */
+    .hero { background: var(--black); padding: 72px 0 64px; position: relative; overflow: hidden; }
+    .hero__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; position: relative; z-index: 1; }
+    .hero__eyebrow { display: inline-flex; align-items: center; gap: 7px; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: var(--green); border-radius: 999px; padding: 5px 15px; font-size: 13px; font-weight: 600; margin-bottom: 20px; width: fit-content; }
+    .hero__title { font-family: var(--font-display); font-size: 58px; font-weight: 900; color: var(--white); line-height: 1.05; margin-bottom: 18px; text-transform: uppercase; }
+    .hero__title em { color: var(--green); font-style: normal; display: block; }
+    .hero__sub { font-size: 16px; color: #9ca3af; max-width: 440px; margin-bottom: 34px; }
+    .hero__actions { display: flex; gap: 12px; flex-wrap: wrap; }
     
-    .header__actions {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .search-bar {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    .search-bar__input {
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      outline: none;
-    }
-    .search-bar__btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-left: -30px;
-      color: #6b7280;
-    }
-    .cart-btn {
-      background: none;
-      border: none;
-      position: relative;
-      cursor: pointer;
-      color: #111827;
-      font-size: 20px;
-    }
-    .cart-badge {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #f97316;
-      color: white;
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 50%;
-    }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-size: 15px; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: all 0.18s; text-decoration: none; }
+    .btn--primary { background: var(--green); color: var(--black); }
+    .btn--primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn--ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.2); }
+    .btn--ghost:hover { border-color: var(--green); color: var(--green); }
+    .btn--full { width: 100%; justify-content: center; margin-top: 10px; }
 
-    /* Search Results Overlay */
-    .search-overlay {
-      position: fixed;
-      top: 70px;
-      left: 0;
-      width: 100%;
-      background: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      z-index: 150;
-      padding: 20px 0;
-      border-bottom: 2px solid #f97316;
-    }
-    .search-overlay__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    .search-overlay__header button { background: none; border: none; font-size: 18px; cursor: pointer; }
+    .hero__stats { display: flex; gap: 32px; margin-top: 36px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .hero__stat strong { display: block; font-family: var(--font-display); font-size: 32px; font-weight: 800; color: var(--green); }
+    .hero__stat span { font-size: 13px; color: #6b7280; }
+    .hero__img-wrap { border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; background: var(--gray-800); }
+    .hero__img-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Hero */
-    .hero {
-      padding: 60px 0;
-      background: linear-gradient(135deg, #fef3c7 0%, #fff7ed 100%);
-    }
-    .hero__inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-    .hero__content { flex: 1; min-width: 300px; }
-    .hero__badge {
-      display: inline-block;
-      background: #ffedd5;
-      color: #ea580c;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 15px;
-    }
-    .hero__title {
-      font-size: 42px;
-      font-weight: 800;
-      color: #111827;
-      margin-bottom: 20px;
-      line-height: 1.2;
-    }
-    .hero__accent { color: #f97316; }
-    .hero__sub { font-size: 18px; color: #4b5563; margin-bottom: 30px; }
-    .hero__cta { display: flex; gap: 15px; }
+    /* ===== CATALOG ===== */
+    section { padding: 72px 0; }
+    .section-head { text-align: center; margin-bottom: 48px; }
+    .section-eyebrow { display: inline-block; font-size: 13px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 10px; }
+    .section-title { font-family: var(--font-display); font-size: 38px; font-weight: 800; color: var(--gray-900); text-transform: uppercase; }
+    .section-sub { font-size: 15px; color: var(--gray-500); max-width: 480px; margin: 0 auto; }
     
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      font-weight: 600;
-      border-radius: 6px;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
-    }
-    .btn--primary { background: #f97316; color: #fff; }
-    .btn--primary:hover { background: #ea580c; }
-    .btn--outline { background: transparent; border: 2px solid #d1d5db; color: #4b5563; }
-    .btn--outline:hover { background: #f3f4f6; }
-    .btn--full { width: 100%; margin-bottom: 10px; text-align: center; }
-    .btn--ghost { background: #f3f4f6; color: #4b5563; }
+    .cat-tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+    .cat-tab { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: 2px solid var(--gray-200); background: var(--white); color: var(--gray-700); transition: all 0.16s; }
+    .cat-tab:hover { border-color: var(--green); color: var(--green); }
+    .cat-tab.active { background: var(--green); border-color: var(--green); color: var(--black); font-weight: 700; box-shadow: 0 4px 14px rgba(34,197,94,0.25); }
 
-    /* Kategoriyalar */
-    .categories { padding: 60px 0; }
-    .section-title { font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 10px; }
-    .section-sub { text-align: center; color: #6b7280; margin-bottom: 40px; }
-    .categories__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .cat-card {
-      background: #fff;
-      padding: 25px 20px;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      border: 1px solid #e5e7eb;
-      cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
-    }
-    .cat-card:hover { transform: translateY(-5px); border-color: #f97316; }
-    .cat-card__icon { font-size: 40px; margin-bottom: 15px; }
-    .cat-card__name { font-weight: 600; font-size: 16px; margin-bottom: 5px; color: #111827; }
-    .cat-card__count { color: #9ca3af; font-size: 13px; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+    .prod-card { background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--gray-100); overflow: hidden; transition: all 0.2s; display: flex; flex-direction: column; }
+    .prod-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-green); border-color: var(--green-mid); }
+    .prod-card__img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--gray-100); font-size: 50px; display: flex; align-items: center; justify-content: center; }
+    .prod-card__body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+    .prod-card__badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: var(--green-light); color: var(--green-dark); margin-bottom: 8px; align-self: flex-start; }
+    .prod-card__badge.hot { background: #fee2e2; color: #b91c1c; }
+    .prod-card__badge.new { background: #dbeafe; color: #1d4ed8; }
+    .prod-card__name { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 5px; text-transform: uppercase; }
+    .prod-card__desc { font-size: 13px; color: var(--gray-500); margin-bottom: 10px; flex: 1; }
+    .prod-card__footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .prod-card__price { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--gray-900); }
+    .prod-card__price span { font-size: 12px; font-weight: 400; color: var(--gray-500); }
 
-    /* Katalog & Mahsulotlar Tarmog'i */
-    .catalog { padding: 40px 0; background: #fff; }
-    .catalog__toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e5e7eb; }
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 25px;
-    }
-    .product-card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-    .product-card__icon { font-size: 48px; text-align: center; margin-bottom: 15px; background: #f9fafb; padding: 20px; border-radius: 6px; }
-    .product-card__title { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #111827; }
-    .product-card__category { font-size: 12px; color: #f97316; font-weight: 500; margin-bottom: 10px; }
-    .product-card__price { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 15px; }
+    /* ===== CALCULATOR ===== */
+    #calculator { background: var(--white); }
+    .calc-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; max-width: 960px; margin: 0 auto; }
+    .calc-info h3 { font-family: var(--font-display); font-size: 26px; font-weight: 800; margin-bottom: 14px; text-transform: uppercase; }
+    .calc-info p { color: var(--gray-500); margin-bottom: 20px; font-size: 14px; }
+    .calc-box { background: var(--gray-50); padding: 28px; border-radius: 14px; border: 1.5px solid var(--gray-100); }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; }
+    .field input, .field select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-200); border-radius: 7px; font-size: 15px; background: var(--white); color: var(--gray-900); }
+    .calc-results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    .calc-res-card { background: var(--green-light); border: 1.5px solid #a7f3d0; border-radius: 8px; padding: 12px 14px; text-align: center; }
+    .calc-res-card p { font-size: 12px; color: var(--green-dark); font-weight: 600; margin-bottom: 3px; }
+    .calc-res-card strong { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: #065f46; }
 
-    /* Kalkulyator */
-    .calculator { background: #f3f4f6; padding: 60px 0; }
-    .calc__tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
-    .calc__tab {
-      background: #fff;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid #d1d5db;
-    }
-    .calc__tab--active { background: #f97316; color: white; border-color: #f97316; }
-    .calc__panels { background: #fff; padding: 30px; border-radius: 12px; max-width: 700px; margin: 0 auto; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .calc__panel { display: none; }
-    .calc__panel--active { display: block; }
-    .calc__row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
-    .calc__field { flex: 1; min-width: 140px; }
-    .calc__field label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 14px; }
-    .calc__input { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; }
-    .calc__result { margin-top: 25px; padding: 20px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; }
-    .calc__result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center; }
-    .calc__result-val { display: block; font-size: 24px; font-weight: 700; color: #16a34a; }
-    .calc__result-key { color: #4b5563; font-size: 13px; }
+    /* ===== ORDER & SAVAT SECTION ===== */
+    #order-section { background: var(--gray-900); color: white; }
+    #order-section .section-title { color: white; }
+    .order-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .cart-panel { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(34,197,94,0.3); border-radius: 14px; overflow: hidden; }
+    .cart-panel__head { background: var(--green); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; color: var(--black); }
+    .cart-panel__head h3 { font-family: var(--font-display); font-size: 18px; font-weight: 800; text-transform: uppercase; }
+    .cart-items { max-height: 340px; overflow-y: auto; padding: 10px; }
+    .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.08); gap: 10px; }
+    .cart-item__name { font-size: 14px; font-weight: 600; color: var(--white); }
+    .cart-item__price { color: var(--green); font-weight: 700; font-family: var(--font-display); }
+    .cart-item__del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 16px; }
+    .cart-empty { text-align: center; padding: 40px; color: var(--gray-500); }
+    .cart-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .cart-row { display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 15px; }
+    .cart-row strong { color: var(--green); font-size: 20px; font-family: var(--font-display); }
 
-    /* Savatcha Drawer */
-    .cart-drawer {
-      position: fixed;
-      top: 0;
-      right: -400px;
-      width: 100%;
-      max-width: 400px;
-      height: 100%;
-      background: white;
-      box-shadow: -4px 0 10px rgba(0,0,0,0.1);
-      z-index: 200;
-      transition: right 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
-    .cart-drawer.active { right: 0; }
-    .cart-drawer__header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
-    .cart-drawer__items { padding: 20px; flex: 1; overflow-y: auto; }
-    .cart-drawer__footer { padding: 20px; border-top: 1px solid #e5e7eb; background: #f9fafb; }
-    .cart-summary__row { display: flex; justify-content: space-between; margin-bottom: 10px; color: #4b5563; }
-    .cart-summary__total { font-weight: 700; font-size: 18px; color: #111827; border-top: 1px solid #d1d5db; padding-top: 10px; }
-    .cart-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:190; display:none; }
-    .cart-overlay.active { display:block; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+    /* ===== MODAL ===== */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); color: var(--black); border-radius: 14px; padding: 32px; max-width: 440px; width: 100%; }
+    .modal h3 { font-family: var(--font-display); font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; }
+    .modal p { color: var(--gray-500); font-size: 14px; margin-bottom: 20px; }
 
-    /* Checkout Modal */
-    .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:250; display:none; align-items:center; justify-content:center; }
-    .modal-overlay.active { display:flex; }
-    .modal--checkout { background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-    .form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    /* ===== SERVICES ===== */
+    #services { background: var(--gray-100); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+    .svc-card { background: var(--white); border-radius: var(--radius); padding: 28px 24px; text-align: center; border: 1px solid var(--gray-200); }
+    .svc-icon { font-size: 40px; margin-bottom: 10px; }
 
-    /* Qolgan bo'limlar */
-    .delivery__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 20px 0; }
-    .delivery__card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid #e5e7eb; }
-    .b2b { background: #111827; color: white; padding: 60px 0; }
-    .b2b__inner { display: flex; justify-content: space-between; align-items: center; gap: 40px; flex-wrap: wrap; }
-    footer { background: #1f2937; color: #9ca3af; padding: 40px 0; font-size: 14px; }
-    .no-results { text-align: center; padding: 40px; color: #6b7280; font-size: 16px; width: 100%; grid-column: 1 / -1; }
+    footer { background: #0d1117; color: #6b7280; padding: 30px 0; text-align: center; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.05); }
+    
+    @media (max-width: 900px) { .hero__grid, .order-grid, .calc-wrap { grid-template-columns: 1fr; } .hero__img-wrap { display: none; } }
   </style>
 </head>
 <body>
 
+  <!-- ===== HEADER ===== -->
   <header>
     <div class="container header__inner">
-      <a href="#" class="logo">
-        <span>⚙</span>
-        <span>Qurilish<strong>Mart</strong></span>
-      </a>
+      <a href="#" class="logo">⚡ Sport<em>Max</em></a>
       <nav>
         <a href="#catalog">Katalog</a>
         <a href="#calculator">Kalkulyator</a>
-        <a href="#delivery">Yetkazib berish</a>
-        <a href="#b2b">B2B</a>
+        <a href="#services">Xizmatlar</a>
+        <a href="#order-section" class="cart-btn">🛒 Savat <span class="cart-badge" id="cartCountBadge">0</span></a>
       </nav>
-      <div class="header__actions">
-        <div class="search-bar">
-          <input type="text" id="globalSearch" placeholder="Mahsulot qidiring..." class="search-bar__input" oninput="handleSearch(this.value)" />
-          <button class="search-bar__btn">🔍</button>
-        </div>
-        <button class="cart-btn" onclick="toggleCart()">
-          🛒 <span class="cart-badge" id="cartBadge">0</span>
-        </button>
-      </div>
     </div>
   </header>
 
-  <div class="search-overlay" id="searchOverlay" style="display:none">
-    <div class="container">
-      <div class="search-overlay__header">
-        <h3>Qidiruv natijalari</h3>
-        <button onclick="closeSearch()">✕</button>
-      </div>
-      <div class="products-grid" id="searchResults"></div>
-    </div>
-  </div>
-
+  <!-- ===== HERO ===== -->
   <section class="hero">
-    <div class="container hero__inner">
-      <div class="hero__content">
-        <div class="hero__badge">🏗️ Toshkent bo'ylab yetkazib berish</div>
-        <h1 class="hero__title">Qurilish mollari —<br/><span class="hero__accent">tez, arzon, ishonchli</span></h1>
-        <p class="hero__sub">Barcha turdagi mahsulotlar ulgurji va chakana narxlarda.</p>
+    <div class="container">
+      <div class="hero__grid">
+        <div>
+          <div class="hero__eyebrow">🏆 O'zbekistoning №1 Sport Do'koni</div>
+          <h1 class="hero__title">Sport — <em>hayot tarzi!</em></h1>
+          <p class="hero__sub">Trenajorlar, sport kiyimi, aksessuarlar va sport oziq-ovqatlari ulgurji narxlarda.</p>
+          <div class="hero__actions">
+            <a href="#catalog" class="btn btn--primary">💪 Katalogni ko'rish</a>
+            <a href="#calculator" class="btn btn--ghost">🧮 Porsiya hisobi</a>
+          </div>
+        </div>
+        <div class="hero__img-wrap">
+          <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&auto=format&fit=crop" alt="Sport" />
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="categories">
+  <!-- ===== CATALOG (6 TA TO'LIQ KATEGORIYA) ===== -->
+  <section id="catalog">
     <div class="container">
-      <h2 class="section-title">Kategoriyalar</h2>
-      <p class="section-sub">Bo'limlardan birini tanlang va unga tegishli mahsulotlarni ko'ring</p>
-      <div class="categories__grid">
-        <button class="cat-card" onclick="filterByCategory('Sement va qum')">
-          <div class="cat-card__icon">🪣</div>
-          <div class="cat-card__name">Sement va qum</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
-        <button class="cat-card" onclick="filterByCategory('Kafel va plitka')">
-          <div class="cat-card__icon">🪟</div>
-          <div class="cat-card__name">Kafel va plitka</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
-        <button class="cat-card" onclick="filterByCategory('Bo\'yoq va lak')">
-          <div class="cat-card__icon">🎨</div>
-          <div class="cat-card__name">Bo'yoq va lak</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
-        <button class="cat-card" onclick="filterByCategory('Laminat va parket')">
-          <div class="cat-card__icon">🪵</div>
-          <div class="cat-card__name">Laminat va parket</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
-        <button class="cat-card" onclick="filterByCategory('G\'isht')">
-          <div class="cat-card__icon">🧱</div>
-          <div class="cat-card__name">G'isht</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
-        <button class="cat-card" onclick="filterByCategory('Santexnika')">
-          <div class="cat-card__icon">🚿</div>
-          <div class="cat-card__name">Santexnika</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
-        <button class="cat-card" onclick="filterByCategory('Elektr')">
-          <div class="cat-card__icon">⚡</div>
-          <div class="cat-card__name">Elektr</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
-        <button class="cat-card" onclick="filterByCategory('Asbob-uskunalar')">
-          <div class="cat-card__icon">🔧</div>
-          <div class="cat-card__name">Asbob-uskunalar</div>
-          <div class="cat-card__count">Mahsulotlarni ko'rish</div>
-        </button>
+      <div class="section-head">
+        <span class="section-eyebrow">Katalog</span>
+        <h2 class="section-title">Kategoriyalar bo'yicha mahsulotlar</h2>
       </div>
-    </div>
-  </section>
 
-  <section class="catalog" id="catalog">
-    <div class="container">
-      <div class="catalog__toolbar">
-        <h3 id="catalogTitle">Barcha mahsulotlar</h3>
-        <button class="btn btn--outline" onclick="filterByCategory('all')">Hammasini ko'rsatish</button>
+      <div class="cat-tabs">
+        <button class="cat-tab active" onclick="filterCategory('trenajor', this)">🏋️ Trenajorlar</button>
+        <button class="cat-tab" onclick="filterCategory('kiyim', this)">👕 Sport Kiyim</button>
+        <button class="cat-tab" onclick="filterCategory('aksessuar', this)">🎽 Aksessuarlar</button>
+        <button class="cat-tab" onclick="filterCategory('ovqat', this)">🥤 Sport Ovqat</button>
+        <button class="cat-tab" onclick="filterCategory('futbol', this)">⚽ Futbol</button>
+        <button class="cat-tab" onclick="filterCategory('tennis', this)">🎾 Tennis</button>
       </div>
+
       <div class="products-grid" id="productsGrid">
-        </div>
+        <!-- JavaScript dinamik to'ldiradi -->
+      </div>
     </div>
   </section>
 
-  <section class="calculator" id="calculator">
+  <!-- ===== FITNES & PORSIYA KALKULYATORI ===== -->
+  <section id="calculator">
     <div class="container">
-      <h2 class="section-title">Kalkulyator</h2>
-      <div class="calc__tabs">
-        <button class="calc__tab calc__tab--active" onclick="switchCalc('kafel', this)">🪟 Kafel</button>
-        <button class="calc__tab" onclick="switchCalc('paint', this)">🎨 Bo'yoq</button>
-        <button class="calc__tab" onclick="switchCalc('cement', this)">🪣 Sement</button>
+      <div class="section-head">
+        <span class="section-eyebrow">Oziqlanish</span>
+        <h2 class="section-title">Kaloriya va Porsiya hisoblagichi</h2>
       </div>
-      <div class="calc__panels">
-        <div class="calc__panel calc__panel--active" id="panel-kafel">
-          <div class="calc__row">
-            <div class="calc__field"><label>Uzunlik (m)</label><input type="number" id="kafel-len" value="4" oninput="calcKafel()" class="calc__input"/></div>
-            <div class="calc__field"><label>Kenglik (m)</label><input type="number" id="kafel-wid" value="3" oninput="calcKafel()" class="calc__input"/></div>
-          </div>
-          <div class="calc__result">
-            <div class="calc__result-grid">
-              <div><span class="calc__result-val" id="kr-area">12</span><span class="calc__result-key">kv.m maydon</span></div>
-              <div><span class="calc__result-val" id="kr-boxes">6</span><span class="calc__result-key">quti kafel</span></div>
-            </div>
-          </div>
+      <div class="calc-wrap">
+        <div class="calc-info">
+          <h3>Kunlik normani aniqlang</h3>
+          <p>Maqsadingiz va jismoniy holatingizga qarab organizmingizga kerakli kaloriya va oqsil (protein) miqdorini aniq hisoblang.</p>
         </div>
-        <div class="calc__panel" id="panel-cement">
-          <div class="calc__row">
-            <div class="calc__field"><label>Maydon (kv.m)</label><input type="number" id="cement-area" value="20" oninput="calcCement()" class="calc__input"/></div>
+        <div class="calc-box">
+          <div class="field">
+            <label>Vazningiz (kg)</label>
+            <input type="number" id="calcWeight" value="70" oninput="calculateFitness()" />
           </div>
-          <div class="calc__result">
-            <div class="calc__result-grid">
-              <div><span class="calc__result-val" id="cr-bags">2</span><span class="calc__result-key">qop (50kg)</span></div>
+          <div class="field">
+            <label>Maqsad</label>
+            <select id="calcGoal" onchange="calculateFitness()">
+              <option value="gain">Mushak yig'ish (Vazn olish)</option>
+              <option value="lose">Ozish (Yog' eritish)</option>
+              <option value="maintain">Formani saqlash</option>
+            </select>
+          </div>
+          <div class="calc-results-grid">
+            <div class="calc-res-card">
+              <p>Tavsiya etilgan kaloriya</p>
+              <strong id="resCalories">2400 kkal</strong>
             </div>
-          </div>
-        </div>
-        <div class="calc__panel" id="panel-paint">
-          <div class="calc__row">
-            <div class="calc__field"><label>Devor yuzi (kv.m)</label><input type="number" id="paint-area" value="40" oninput="calcPaint()" class="calc__input"/></div>
-          </div>
-          <div class="calc__result">
-            <div class="calc__result-grid">
-              <div><span class="calc__result-val" id="pr-liters">10</span><span class="calc__result-key">litr bo'yoq</span></div>
+            <div class="calc-res-card">
+              <p>Kerakli Protein (Oqsil)</p>
+              <strong id="resProtein">140 gr</strong>
             </div>
           </div>
         </div>
@@ -443,136 +256,178 @@ html_content = """<!DOCTYPE html>
     </div>
   </section>
 
-  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-  <div class="cart-drawer" id="cartDrawer">
-    <div class="cart-drawer__header"><h3>Savatcha</h3><button onclick="toggleCart()">✕</button></div>
-    <div class="cart-drawer__items" id="cartItems"><div class="cart-empty">Savatcha bo'sh</div></div>
-    <div class="cart-drawer__footer" id="cartFooter" style="display:none;">
-      <div class="cart-summary__row"><span>Jami sum:</span><strong id="cartTotalText">0 so'm</strong></div>
-      <button class="btn btn--primary btn--full" onclick="openCheckout()">Buyurtma berish</button>
+  <!-- ===== XIZMATLAR ===== -->
+  <section id="services">
+    <div class="container">
+      <div class="services-grid">
+        <div class="svc-card"><div class="svc-icon">🚚</div><h3>Tez Yetkazish</h3><p>O'zbekiston bo'ylab 1 kunda yetkazib berish.</p></div>
+        <div class="svc-card"><div class="svc-icon">🛠️</div><h3>O'rnatib berish</h3><p>Katta trenajorlarni bepul yig'ish xizmati.</p></div>
+        <div class="svc-card"><div class="svc-icon">🛡️</div><h3>Kafolat</h3><p>Barcha mahsulotlarga 1 yilgacha rasmiy kafolat.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BUYURTMA VA SAVATCHA PANEL ===== -->
+  <section id="order-section">
+    <div class="container">
+      <div class="order-grid">
+        <div>
+          <h2 class="section-title">Sizning Savatchangiz</h2>
+          <p style="color: #9ca3af; margin-bottom: 20px;">Tanlangan mahsulotlarni tekshiring va buyurtmani rasmiylashtiring.</p>
+        </div>
+        <div class="cart-panel">
+          <div class="cart-panel__head"><h3>Savat</h3></div>
+          <div class="cart-items" id="cartItemsList">
+            <div class="cart-empty">Savatchangiz bo'sh</div>
+          </div>
+          <div class="cart-footer">
+            <div class="cart-row"><span>Jami summa:</span><strong id="cartTotalPrice">0 so'm</strong></div>
+            <button class="order-btn" id="checkoutBtn" onclick="openModal()" disabled>Buyurtma berish</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BUYURTMA MODAL OYNASI ===== -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal">
+      <h3>Xaridni tasdiqlash</h3>
+      <p>Ma'lumotlaringizni qoldiring, operatorimiz tez orada aloqaga chiqadi.</p>
+      <div class="field"><label>Ismingiz</label><input type="text" id="custName" placeholder="Ism familiya" /></div>
+      <div class="field"><label>Telefon raqamingiz</label><input type="tel" id="custPhone" value="+998" /></div>
+      <div class="modal-actions">
+        <button class="btn btn--primary" onclick="submitOrder()">Tasdiqlash</button>
+        <button class="btn btn--outline-dark" onclick="closeModal()">Yopish</button>
+      </div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="checkoutModal">
-    <div class="modal--checkout">
-      <h3>Buyurtma berish</h3>
-      <div class="form-group"><label>Ism</label><input type="text" id="co-name" class="form-input" placeholder="Ismingiz"/></div>
-      <div class="form-group"><label>Telefon</label><input type="tel" id="co-phone" class="form-input" placeholder="+998"/></div>
-      <button class="btn btn--primary btn--full" onclick="submitOrder()">Tasdiqlash</button>
-      <button class="btn btn--ghost btn--full" onclick="closeCheckout()">Yopish</button>
-    </div>
-  </div>
+  <footer>
+    <p>&copy; 2026 SportMax do'koni. Barcha huquqlar himoyalangan.</p>
+  </footer>
 
   <script>
-    // BARCHA 8 TA KATEGORIYA UCHUN BAZA MAHSULOTLARI
-    const products = [
-      { id: 1, name: "Sement Huaxin M400", category: "Sement va qum", price: 95000, icon: "🪣" },
-      { id: 2, name: "Yuvilgan Qora Qum", category: "Sement va qum", price: 120000, icon: "⏳" },
-      { id: 3, name: "Kafel Keramin 60x60", category: "Kafel va plitka", price: 85000, icon: "🪟" },
-      { id: 4, name: "Marmar Plitka Premium", category: "Kafel va plitka", price: 240000, icon: "🧱" },
-      { id: 5, name: "Emulsiya Caparol Ichki", category: "Bo'yoq va lak", price: 190000, icon: "🎨" },
-      { id: 6, name: "Yog'och uchun Lak", category: "Bo'yoq va lak", price: 55000, icon: "🖌️" },
-      { id: 7, name: "Laminat Kronopol 8mm", category: "Laminat va parket", price: 115000, icon: "🪵" },
-      { id: 8, name: "Pishgan G'isht (Sariq)", category: "G'isht", price: 1200, icon: "🧱" },
-      { id: 9, name: "G'isht A1 Sifatli", category: "G'isht", price: 850, icon: "🧱" },
-      { id: 10, name: "Smesitel Santexnika Grohe", category: "Santexnika", price: 450000, icon: "🚿" },
-      { id: 11, name: "Kabel Ekopen 2x2.5", category: "Elektr", price: 8000, icon: "⚡" },
-      { id: 12, name: "Omburcha va Otvyortka To'plami", category: "Asbob-uskunalar", price: 180000, icon: "🔧" }
+    // MAHSULOTLAR BAZASI (Barcha 6 ta kategoriya qamrab olingan)
+    const database = [
+      { id: 1, cat: 'trenajor', name: 'Shtanga To\'plami 100 kg', price: 2850000, desc: 'Professional sifatli temir shtanga va disklar.', badge: 'HOT', bType: 'hot' },
+      { id: 2, cat: 'trenajor', name: 'Yugurish Yo\'lagi Pro', price: 8900000, desc: '15 tezlik darajasi, LED sensorli ekran.', badge: 'YANGI', bType: 'new' },
+      { id: 3, cat: 'kiyim', name: 'Kompression Futbolka DryFit', price: 185000, desc: 'Namlikni tez o\'tkazuvchi professional mato.', badge: 'TOP', bType: 'hot' },
+      { id: 4, cat: 'kiyim', name: 'Sport Shimi Nike Tech', price: 320000, desc: 'Kundalik va mashqlar uchun juda qulay.', badge: 'AKSIYA', bType: 'sale' },
+      { id: 5, cat: 'aksessuar', name: 'Fitnes Rezinalari To\'plami', price: 95000, desc: '5 xil yuklama darajasiga ega rezinalar.', badge: 'OMBORDA', bType: '' },
+      { id: 6, cat: 'ovqat', name: 'Whey Protein 2.2 kg', price: 650000, desc: 'Mushak o\'sishi uchun yuqori sifatli oqsil.', badge: 'TOP', bType: 'hot' },
+      { id: 7, cat: 'futbol', name: 'Futbol To\'pi Adidas UEFA', price: 450000, desc: 'Chidamlilik va mukammal nazorat uchun.', badge: 'ORIGINAL', bType: 'new' },
+      { id: 8, cat: 'tennis', name: 'Tennis Raketkasi Wilson', price: 780000, desc: 'Professional tennischilar tanlovi.', badge: 'PREMIUM', bType: 'hot' }
     ];
 
     let cart = [];
 
-    // KATEGORIYANI FILTRLASH FUNKSIYASI
-    function filterByCategory(cat) {
+    // KATEGORIYA FILTRLASH
+    function filterCategory(category, element) {
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      if(element) element.classList.add('active');
+
       const grid = document.getElementById('productsGrid');
-      const title = document.getElementById('catalogTitle');
-      grid.innerHTML = "";
+      grid.innerHTML = '';
 
-      let filtered = (cat === 'all') ? products : products.filter(p => p.category === cat);
-      title.innerText = (cat === 'all') ? "Barcha mahsulotlar" : cat + " bo'limi";
-
-      if(filtered.length === 0) {
-        grid.innerHTML = `<div class="no-results">Bu bo'limda hozircha mahsulot yo'q.</div>`;
-        return;
-      }
-
+      const filtered = database.filter(p => p.cat === category);
+      
       filtered.forEach(p => {
         grid.innerHTML += `
-          <div class="product-card">
-            <div>
-              <div class="product-card__icon">\${p.icon}</div>
-              <div class="product-card__category">\${p.category}</div>
-              <div class="product-card__title">\${p.name}</div>
-            </div>
-            <div>
-              <div class="product-card__price">\${p.price.toLocaleString()} so'm</div>
-              <button class="btn btn--primary btn--full" onclick="addToCart(\${p.id})">Savatchaga qo'shish</button>
+          <div class="prod-card">
+            <div class="prod-card__img">📦</div>
+            <div class="prod-card__body">
+              \${p.badge ? `<span class="prod-card__badge \${p.bType}">\${p.badge}</span>` : ''}
+              <div class="prod-card__name">\${p.name}</div>
+              <div class="prod-card__desc">\${p.desc}</div>
+              <div class="prod-card__footer">
+                <div class="prod-card__price">\${p.price.toLocaleString()} <span>so'm</span></div>
+                <button class="btn btn--primary" style="padding: 6px 12px; font-size: 13px;" onclick="addToCart(\${p.id})">+ Savat</button>
+              </div>
             </div>
           </div>
         `;
       });
-      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // SAVATCHA FUNKSIYALARI
-    function toggleCart() {
-      document.getElementById('cartDrawer').classList.toggle('active');
-      document.getElementById('cartOverlay').classList.toggle('active');
-    }
+    // SAVAT LOGIKASI
     function addToCart(id) {
-      const prod = products.find(p => p.id === id);
-      cart.push(prod);
-      updateCart();
+      const item = database.find(p => p.id === id);
+      cart.push(item);
+      renderCart();
     }
-    function updateCart() {
-      document.getElementById('cartBadge').innerText = cart.length;
-      const items = document.getElementById('cartItems');
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function renderCart() {
+      document.getElementById('cartCountBadge').innerText = cart.length;
+      const list = document.getElementById('cartItemsList');
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      
       if(cart.length === 0) {
-        items.innerHTML = '<div class="cart-empty">Savatcha bo\'sh</div>';
-        document.getElementById('cartFooter').style.display = 'none';
+        list.innerHTML = '<div class="cart-empty">Savatchangiz bo\'sh</div>';
+        document.getElementById('cartTotalPrice').innerText = "0 so'm";
+        checkoutBtn.disabled = true;
         return;
       }
-      document.getElementById('cartFooter').style.display = 'block';
-      items.innerHTML = "";
+
+      checkoutBtn.disabled = false;
+      list.innerHTML = '';
       let total = 0;
+
       cart.forEach((item, index) => {
         total += item.price;
-        items.innerHTML += `<div class="cart-item"><span>\${item.name}</span><strong>\${item.price.toLocaleString()} so'm</strong></div>`;
+        list.innerHTML += `
+          <div class="cart-item">
+            <span class="cart-item__name">\${item.name}</span>
+            <span class="cart-item__price">\${item.price.toLocaleString()} so'm</span>
+            <button class="cart-item__del" onclick="removeFromCart(\${index})">✕</button>
+          </div>
+        `;
       });
-      document.getElementById('cartTotalText').innerText = total.toLocaleString() + " so'm";
+
+      document.getElementById('cartTotalPrice').innerText = total.toLocaleString() + " so'm";
     }
 
-    // INTERFEYS BOSHQARUVI
-    function openCheckout() { document.getElementById('checkoutModal').classList.add('active'); }
-    function closeCheckout() { document.getElementById('checkoutModal').classList.remove('active'); }
-    function submitOrder() { alert("Rahmat! Buyurtmangiz qabul qilindi."); cart=[]; updateCart(); closeCheckout(); toggleCart(); }
-    function handleSearch(val) {
-      const overlay = document.getElementById('searchOverlay');
-      const res = document.getElementById('searchResults');
-      if(!val.trim()) { overlay.style.display='none'; return; }
-      overlay.style.display='block'; res.innerHTML="";
-      let matched = products.filter(p => p.name.toLowerCase().includes(val.toLowerCase()));
-      if(matched.length===0) { res.innerHTML="<div class='no-results'>Topilmadi</div>"; return; }
-      matched.forEach(p => {
-        res.innerHTML += `<div class="product-card"><h4>\${p.name}</h4><button class="btn btn--primary" onclick="addToCart(\${p.id})">Qo'shish</button></div>`;
-      });
+    // INTERFAYS & MODAL
+    function openModal() { document.getElementById('orderModal').classList.add('open'); }
+    function closeModal() { document.getElementById('orderModal').classList.remove('open'); }
+    function submitOrder() {
+      const name = document.getElementById('custName').value;
+      if(!name.trim() || name === "Ism familiya") { alert("Iltimos ismingizni kiriting!"); return; }
+      alert("Rahmat, " + name + "! Buyurtmangiz muvaffaqiyatli qabul qilindi.");
+      cart = [];
+      renderCart();
+      closeModal();
     }
-    function closeSearch() { document.getElementById('searchOverlay').style.display='none'; }
-    function switchCalc(type, btn) {
-      document.querySelectorAll('.calc__panel').forEach(p => p.classList.remove('calc__panel--active'));
-      document.getElementById('panel-'+type).classList.add('calc__panel--active');
+
+    // FITNES KALKULYATORI
+    function calculateFitness() {
+      const weight = parseFloat(document.getElementById('calcWeight').value) || 70;
+      const goal = document.getElementById('calcGoal').value;
+      let calories = 2000;
+      let protein = weight * 1.5;
+
+      if(goal === 'gain') { calories = Math.round(weight * 35 + 400); protein = weight * 2; }
+      else if(goal === 'lose') { calories = Math.round(weight * 30 - 300); protein = weight * 1.8; }
+      else { calories = Math.round(weight * 32); protein = weight * 1.6; }
+
+      document.getElementById('resCalories').innerText = calories + " kkal";
+      document.getElementById('resProtein').innerText = Math.round(protein) + " gr";
     }
-    function calcKafel() {
-      let l = document.getElementById('kafel-len').value || 0;
-      let w = document.getElementById('kafel-wid').value || 0;
-      document.getElementById('kr-area').innerText = (l*w).toFixed(1);
-      document.getElementById('kr-boxes').innerText = Math.ceil((l*w)/2);
-    }
-    window.onload = function() { filterByCategory('all'); };
+
+    // Boshlang'ich yuklanish
+    window.onload = function() {
+      filterCategory('trenajor', null);
+      calculateFitness();
+    };
   </script>
 </body>
 </html>
 """
 
-# Streamlit interfeysiga HTML komponentini uzatish
-components.html(html_content, height=1600, scrolling=True)
+# Streamlitga xavfsiz uzatish
+components.html(html_content, height=1800, scrolling=True)
